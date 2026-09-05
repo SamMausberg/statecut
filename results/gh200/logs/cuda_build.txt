@@ -1,0 +1,11 @@
+Consolidate compiler generated dependencies of target statecut_host_interval
+Consolidate compiler generated dependencies of target statecut_cuda_smoke
+Consolidate compiler generated dependencies of target statecut_host_residual
+[ 10%] Building CUDA object CMakeFiles/statecut_device_residual.dir/cuda/device_residual_cli.cu.o
+[ 30%] Built target statecut_host_interval
+[ 50%] Built target statecut_cuda_smoke
+[ 70%] Built target statecut_host_residual
+Consolidate compiler generated dependencies of target statecut_residual_cuda
+[ 90%] Built target statecut_residual_cuda
+[100%] Linking CUDA executable statecut_device_residual
+[100%] Built target statecut_device_residual

@@ -1,0 +1,3 @@
+========= COMPUTE-SANITIZER
+PASS: constant-key mathematical reference; no raw KV pointer used. Not a pretrained benchmark.
+========= ERROR SUMMARY: 0 errors

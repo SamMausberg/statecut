@@ -5,3 +5,5 @@ __pycache__/
 .venv/
 build*/
 lean/.lake/
+.cache/
+results/gh200/captures/

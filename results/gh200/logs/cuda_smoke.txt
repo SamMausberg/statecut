@@ -1,0 +1,1 @@
+PASS: constant-key mathematical reference; no raw KV pointer used. Not a pretrained benchmark.

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Cross-check outward C++ bounds against independent exact rational cases."""
 from fractions import Fraction as F
+import argparse
 from random import Random
 import json
 from pathlib import Path
@@ -13,6 +14,13 @@ from statecut.residual import bf16_cell
 ROOT = Path(__file__).resolve().parents[1]
 
 def run():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--binary", default=str(ROOT/"build/statecut_host_residual"))
+    parser.add_argument("--output", default=str(ROOT/"results/host_residuals.json"))
+    parser.add_argument("--device", action="store_true", help="require the CUDA arithmetic probe")
+    args = parser.parse_args()
+    if args.device and Path(args.binary).name != "statecut_device_residual":
+        parser.error("--device requires statecut_device_residual")
     rng = Random(90833)
     requests, checkers = [], []
     def fstr(x):
@@ -35,11 +43,11 @@ def run():
         c=bf16_cell(code)
         requests.append(f"cell {code}")
         checkers.append(("cell", c))
-    for i in range(513):
-        z=F(i-256,8)
+    for i in range(1025):
+        z=F(i-512,8)
         requests.append(f"weights {fstr(z)} {fstr(z)}")
         checkers.append(("interval",exp_reference(z)))
-    proc=subprocess.run([str(ROOT/"build/statecut_host_residual")],
+    proc=subprocess.run([args.binary],
                         input="\n".join(requests)+"\n",text=True,capture_output=True,check=True)
     lines=proc.stdout.splitlines()
     if len(lines)!=len(checkers):
@@ -52,9 +60,12 @@ def run():
         else:
             assert (low,high,int(parts[2]),int(parts[3]))==(expected.lo,expected.hi,int(expected.closed),1)
     result={"passed":len(lines),"moment_cases":2500,"all_finite_canonical_bf16_cells":65279,
-            "e24_weight_cases":513,"device_executed":False,
-            "scope":"host cross-check only; not Lean or CUDA implementation verification"}
-    (ROOT/"results/host_residuals.json").write_text(json.dumps(result,indent=2)+"\n")
+            "e24_weight_cases":1025,"device_executed":args.device,
+            "binary":str(Path(args.binary)),
+            "scope":("device arithmetic oracle cross-check; not formal verification" if args.device
+                     else "host cross-check only; not Lean or CUDA implementation verification")}
+    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
+    Path(args.output).write_text(json.dumps(result,indent=2)+"\n")
     print(json.dumps(result,indent=2))
 
 if __name__=="__main__":
