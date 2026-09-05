@@ -1,0 +1,7 @@
+{
+  "passed": 2525,
+  "arithmetic_cases": 1500,
+  "exp_cases": 1025,
+  "device_intrinsics_tested": false,
+  "note": "Host emulation tested; this is not CUDA execution or a formal floating-point proof."
+}

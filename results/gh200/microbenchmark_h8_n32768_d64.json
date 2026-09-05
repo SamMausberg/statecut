@@ -1,0 +1,58 @@
+{
+  "scope": "synthetic local E24 certificate microbenchmark, not end-to-end acceleration",
+  "gpu": "NVIDIA GH200 480GB",
+  "compute_capability": [
+    9,
+    0
+  ],
+  "torch": "2.7.0",
+  "cuda": "12.8",
+  "machine": "aarch64",
+  "heads": 8,
+  "length": 32768,
+  "dim": 64,
+  "construction_ms": 144.68032200011294,
+  "summary_nodes_per_head": 1,
+  "raw_KV_rows_read_by_gate": 0,
+  "proposal": "constant 16 from construction; no dense oracle proposal",
+  "gate": {
+    "device_ms": {
+      "p50": 0.06284800171852112,
+      "p95": 0.06761600077152252,
+      "min": 0.06080000102519989
+    },
+    "synchronized_wall_ms": {
+      "p50": 0.07601700008308399,
+      "p95": 0.09113700025409344,
+      "min": 0.07321699968088069
+    },
+    "graph_amortized_device_ms": {
+      "p50": 0.04583599805831909,
+      "p95": 0.04585311889648438,
+      "min": 0.045823040008544924
+    }
+  },
+  "torch_sdpa": {
+    "device_ms": {
+      "p50": 0.07892799749970436,
+      "p95": 0.10291200131177902,
+      "min": 0.07072000205516815
+    },
+    "synchronized_wall_ms": {
+      "p50": 0.10000099996432255,
+      "p95": 0.1280339997720148,
+      "min": 0.08966399991550134
+    },
+    "graph_amortized_device_ms": {
+      "p50": 0.032270720005035405,
+      "p95": 0.03234944105148316,
+      "min": 0.032179200649261476
+    }
+  },
+  "graph_batch": 100,
+  "timing_scope": "single-call events include host launch gaps; graph batches amortize submission over sequential fixed-input calls and are not token latency",
+  "observed_SDPA_cut_equality": true,
+  "pretrained": false,
+  "end_to_end_speedup": null,
+  "backend_equivalence_proved": false
+}

@@ -44,15 +44,31 @@ SC_HD inline Interval residual_moment(Moment s, Interval w, double threshold) {
   return add(center,{-radius,radius});
 }
 
+SC_HD inline double rne_e24_grid(double x) {
+  // Exact power-of-two scaling, floor, and exact integer/parity operations.
+  // When scaled >= 2^53 it is already an even integer in binary64. Below
+  // that range every chosen integer and the rescaling are representable.
+  if (!finite(x) || x < 0.0) return NAN;
+  const double scaled=x*0x1p24;
+  if (!finite(scaled)) return NAN;
+  const double lower=floor(scaled), fraction=scaled-lower;
+  const bool odd=lower-2.0*floor(lower*0.5)!=0.0;
+  return (lower+(fraction>0.5 || (fraction==0.5 && odd) ? 1.0 : 0.0))*0x1p-24;
+}
+
 SC_HD inline Interval e24_weights(Interval score) {
   // E24(z) = 2^-24 RNE(2^24 exp(z)). Half an E24 quantum is a
   // global ABSOLUTE quantization bound. No common score shift is applied.
   if (!valid(score)) return invalid();
   if (score.lo == 0.0 && score.hi == 0.0) return point(1.0);
-  Interval a=exp_real(score.lo), b=exp_real(score.hi);
+  // Since e > 2, x <= -25 implies exp(x) < 2^-25 and E24(x)=0.
+  // This also handles arbitrarily negative finite scores without a shift.
+  Interval a=score.lo<=-25.0 ? point(0.0) : exp_real(score.lo);
+  Interval b=score.hi<=-25.0 ? point(0.0) : exp_real(score.hi);
   if (!valid(a)||!valid(b)) return invalid();
-  constexpr double half_quantum=0x1p-25;
-  return {mx(0.0,down_add(a.lo,-half_quantum)),up_add(b.hi,half_quantum)};
+  // Monotonicity permits rounding both enclosure endpoints to the actual
+  // target lattice. This is tighter than adding a global half-quantum.
+  return {rne_e24_grid(a.lo),rne_e24_grid(b.hi)};
 }
 
 struct Cell { double lo, hi; bool closed; bool ok; };

@@ -23,11 +23,12 @@ def main():
     p.add_argument("--heads",type=int,default=8)
     p.add_argument("--dim",type=int,default=64)
     p.add_argument("--repeats",type=int,default=100)
+    p.add_argument("--graph-batch",type=int,default=100)
     p.add_argument("--out",default="results/gh200_microbenchmark.json")
     a=p.parse_args()
     if not torch.cuda.is_available():
         raise SystemExit("CUDA unavailable. No GPU timing or certificate claimed.")
-    if not a.length>0 or a.length%4 or not 1<=a.dim<=128 or not a.heads>0 or a.repeats<2:
+    if not a.length>0 or a.length%4 or not 1<=a.dim<=128 or not a.heads>0 or a.repeats<2 or a.graph_batch<1:
         raise SystemExit("length must be a positive multiple of 4; 1<=dim<=128; heads>0; repeats>=2")
     h,n,d=a.heads,a.length,a.dim
     if n>=2**31:
@@ -74,7 +75,20 @@ def main():
         def describe(xs):
             xs=sorted(xs)
             return {"p50":statistics.median(xs),"p95":xs[min(len(xs)-1,int(.95*len(xs)))],"min":xs[0]}
-        return {"device_ms":describe(device_ms),"synchronized_wall_ms":describe(wall_ms)}
+        # Keep the verifier, input tensors, and graph alive throughout replay.
+        # This local benchmark owns every allocation; it is not a serving
+        # integration or a proof about external CUDA-graph lifetime management.
+        graph=torch.cuda.CUDAGraph()
+        with torch.cuda.graph(graph):
+            for _ in range(a.graph_batch):
+                fn()
+        graph_ms=[]
+        for _ in range(a.repeats):
+            start_evt=torch.cuda.Event(enable_timing=True);end_evt=torch.cuda.Event(enable_timing=True)
+            start_evt.record();graph.replay();end_evt.record();end_evt.synchronize()
+            graph_ms.append(start_evt.elapsed_time(end_evt)/a.graph_batch)
+        return {"device_ms":describe(device_ms),"synchronized_wall_ms":describe(wall_ms),
+                "graph_amortized_device_ms":describe(graph_ms)}
     result={"scope":"synthetic local E24 certificate microbenchmark, not end-to-end acceleration",
             "gpu":torch.cuda.get_device_name(),"compute_capability":torch.cuda.get_device_capability(),
             "torch":torch.__version__,"cuda":torch.version.cuda,"machine":platform.machine(),
@@ -82,6 +96,8 @@ def main():
             "summary_nodes_per_head":1,"raw_KV_rows_read_by_gate":0,
             "proposal":"constant 16 from construction; no dense oracle proposal",
             "gate":timings(verifier.evaluate),"torch_sdpa":timings(dense),
+            "graph_batch":a.graph_batch,
+            "timing_scope":"single-call events include host launch gaps; graph batches amortize submission over sequential fixed-input calls and are not token latency",
             "observed_SDPA_cut_equality":parity,"pretrained":False,
             "end_to_end_speedup":None,"backend_equivalence_proved":False}
     Path(a.out).parent.mkdir(parents=True,exist_ok=True)

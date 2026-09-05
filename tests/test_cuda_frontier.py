@@ -107,3 +107,10 @@ def test_invalid_or_unsupported_frontier_fails_closed(defect):
     elif defect == "infinity": candidate.fill_(0x7f80)
     elif defect == "nan-cell": candidate.fill_(0x7fc0)
     assert verifier.evaluate().item() == 0
+
+
+def test_exact_zero_tail_can_be_skipped_with_a_positive_remaining_mass():
+    verifier = make_frontier([F(1)], [[[F(-10**100)]], [[F(0)]]],
+                             [[[F(-100)]], [[F(16)]]], [0x4180])
+    assert verifier.evaluate().item() == 1
+    assert verifier.den[0,0].tolist() == [0.0,0.0]

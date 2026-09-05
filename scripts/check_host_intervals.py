@@ -39,5 +39,7 @@ for line,truth in zip(outputs,expected):
 result=dict(passed=len(expected),arithmetic_cases=1500,exp_cases=1025,
             device_intrinsics_tested=False,
             note="Host emulation tested; this is not CUDA execution or a formal floating-point proof.")
-(root/"results"/"host_interval_tests.json").write_text(json.dumps(result,indent=2)+"\n")
+output=Path(sys.argv[2]) if len(sys.argv)>2 else root/"results"/"host_interval_tests.json"
+output.parent.mkdir(parents=True,exist_ok=True)
+output.write_text(json.dumps(result,indent=2)+"\n")
 print(json.dumps(result,indent=2))

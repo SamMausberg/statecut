@@ -1,8 +1,10 @@
 {
-  "passed": 68804,
+  "passed": 68851,
   "moment_cases": 2500,
   "all_finite_canonical_bf16_cells": 65279,
   "e24_weight_cases": 1025,
+  "exact_negative_tail_cases": 5,
+  "e24_grid_rounding_cases": 42,
   "device_executed": true,
   "binary": "build-gh200/statecut_device_residual",
   "scope": "device arithmetic oracle cross-check; not formal verification"

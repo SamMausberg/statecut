@@ -2,13 +2,14 @@
 """Cross-check outward C++ bounds against independent exact rational cases."""
 from fractions import Fraction as F
 import argparse
+import math
 from random import Random
 import json
 from pathlib import Path
 import subprocess
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/"src"))
-from statecut.arithmetic import exp_reference
+from statecut.arithmetic import exp_reference, rne_integer
 from statecut.residual import bf16_cell
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -47,6 +48,19 @@ def run():
         z=F(i-512,8)
         requests.append(f"weights {fstr(z)} {fstr(z)}")
         checkers.append(("interval",exp_reference(z)))
+    for z in [-1e300,-2048.0,-1280.0,-65.0,-25.0]:
+        requests.append(f"weights {fstr(z)} {fstr(z)}")
+        checkers.append(("exact",F(0)))  # exp(z)<2^-25 follows from e>2.
+    # Exact E24 grid midpoint parity and adjacent representable doubles,
+    # including large integers beyond the binary64 fractional range.
+    grid_cases = 0
+    for integer in [0,1,2,3,127,128,255,256,2**24-1,2**31,2**51-1,2**52,2**53,2**80]:
+        midpoint = float(F(2*integer+1, 2**25))
+        for value in [math.nextafter(midpoint,0.0),midpoint,math.nextafter(midpoint,math.inf)]:
+            requests.append(f"grid {fstr(value)}")
+            expected=F(rne_integer(F(value)*2**24),2**24)
+            checkers.append(("exact",expected))
+            grid_cases += 1
     proc=subprocess.run([args.binary],
                         input="\n".join(requests)+"\n",text=True,capture_output=True,check=True)
     lines=proc.stdout.splitlines()
@@ -57,10 +71,13 @@ def run():
         low,high=F(float(parts[0])),F(float(parts[1]))
         if kind=="interval":
             assert low<=expected<=high, (line,expected)
+        elif kind=="exact":
+            assert low==expected==high, (line,expected)
         else:
             assert (low,high,int(parts[2]),int(parts[3]))==(expected.lo,expected.hi,int(expected.closed),1)
     result={"passed":len(lines),"moment_cases":2500,"all_finite_canonical_bf16_cells":65279,
-            "e24_weight_cases":1025,"device_executed":args.device,
+            "e24_weight_cases":1025,"exact_negative_tail_cases":5,
+            "e24_grid_rounding_cases":grid_cases,"device_executed":args.device,
             "binary":str(Path(args.binary)),
             "scope":("device arithmetic oracle cross-check; not formal verification" if args.device
                      else "host cross-check only; not Lean or CUDA implementation verification")}

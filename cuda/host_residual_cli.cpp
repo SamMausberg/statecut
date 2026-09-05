@@ -22,6 +22,11 @@ int main() {
       if (!(std::cin>>s.lo>>s.hi)) return 2;
       Interval r=e24_weights(s);
       std::cout<<r.lo<<" "<<r.hi<<"\n";
+    } else if (op=="grid") {
+      double value;
+      if (!(std::cin>>value)) return 2;
+      const double rounded=rne_e24_grid(value);
+      std::cout<<rounded<<" "<<rounded<<"\n";
     } else return 2;
   }
   return 0;

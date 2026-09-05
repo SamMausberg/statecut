@@ -22,6 +22,9 @@ __global__ void probe(const Request* requests, Answer* answers, size_t count) {
   if (r.op == 1) {
     auto c = statecut::exact_bf16_cell(r.bits);
     answers[i] = {c.lo, c.hi, int(c.closed), int(c.ok)};
+  } else if (r.op == 3) {
+    const double rounded=statecut::rne_e24_grid(r.threshold);
+    answers[i] = {rounded,rounded,0,int(statecut::finite(rounded))};
   } else {
     auto v = r.op == 0 ? statecut::residual_moment(r.moment, r.weights, r.threshold)
                        : statecut::e24_weights(r.weights);
@@ -53,6 +56,9 @@ int main() {
     } else if (op == "weights") {
       r.op = 2;
       if (!(std::cin >> r.weights.lo >> r.weights.hi)) return 2;
+    } else if (op == "grid") {
+      r.op = 3;
+      if (!(std::cin >> r.threshold)) return 2;
     } else return 2;
     requests.push_back(r);
   }
