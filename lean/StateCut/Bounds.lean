@@ -7,7 +7,7 @@ Algebraic certificate theorems, over arbitrary finite sets and real inputs.
 No floating-point error estimate is smuggled in as a theorem. A deployed
 backend must establish the score/weight and arithmetic enclosures.
 
-STATUS: Source provided; not compiler-checked in the authoring environment.
+The pinned build and dependency audit are reproduced by scripts/check_lean.sh.
 -/
 namespace StateCut
 
@@ -105,6 +105,6 @@ theorem ratio_from_cross_checks {dl d du nl n nu l u : ℝ}
 an exact count/value-sum summary determines attention for every query. -/
 theorem constant_weight_attention {w n s : ℝ} (hw : w ≠ 0) (hn : n ≠ 0) :
     (w * s) / (n * w) = s / n := by
-  field_simp [hw, hn] <;> ring
+  field_simp [hw, hn]; ring
 
 end StateCut

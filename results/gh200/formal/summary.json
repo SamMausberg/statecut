@@ -1,0 +1,1020 @@
+{
+  "allowed_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "allowed_foundational_dependencies": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "audited_constant_count": 96,
+  "audited_theorem_count": 84,
+  "boundary": "Real-valued mathematics and abstract state composition. No proof of BF16 cell generation, Python/CUDA refinement, hardware execution, or a backend numerical bridge.",
+  "build_passed": true,
+  "compiler_runtime_auxiliaries_outside_proof_audit": [
+    "StateCut.filteredStep._cstage1",
+    "StateCut.filteredStep._cstage2",
+    "StateCut.filteredStep._rarg._cstage2",
+    "StateCut.rationalArgmaxGate._cstage1",
+    "StateCut.rationalArgmaxGate._cstage2",
+    "StateCut.rationalArgmaxGate._lambda_1._cstage2",
+    "StateCut.rationalArgmaxGate._lambda_2._cstage2",
+    "StateCut.rationalArgmaxGate._lambda_3._cstage2",
+    "StateCut.rationalArgmaxGate._lambda_4._cstage2",
+    "StateCut.rationalArgmaxGate._lambda_5._cstage2",
+    "StateCut.run._cstage1",
+    "StateCut.run._cstage2",
+    "StateCut.run._rarg._cstage2",
+    "StateCut.run.match_1._cstage1"
+  ],
+  "declarations": [
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "definition",
+      "name": "StateCut.IsGreedy"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.abs_chord_mul"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.abs_chord_sum"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.abs_chord_sum._proof_1"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.abs_chord_sum._proof_2"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.abs_eq_two_max_sub"
+    },
+    {
+      "dependencies": [
+        "Quot.sound",
+        "propext"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.all_future_equal"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.argmax_certificate"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.argmax_certificate._proof_1"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.backend_bridge_cell"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.backend_bridge_gate"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.balanced_margin"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "definition",
+      "name": "StateCut.cellLower"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.cellLower.eq_1"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "definition",
+      "name": "StateCut.cellUpper"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.cellUpper.eq_1"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.centered_first_moment"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.centered_residual_bound"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.certified_greedy_equals_reference"
+    },
+    {
+      "dependencies": [
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.checked_cut_transition"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.checked_write_frontier"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "definition",
+      "name": "StateCut.chordEnvelope"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.chordEnvelope.eq_1"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.chordEnvelope_shift"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.constant_value_residual"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.constant_weight_attention"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.disjoint_split_count"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.disjoint_split_sum"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.dot_box"
+    },
+    {
+      "dependencies": [],
+      "kind": "theorem",
+      "name": "StateCut.exact_cut_suffix"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.exp_weight_bounds"
+    },
+    {
+      "dependencies": [],
+      "kind": "definition",
+      "name": "StateCut.filteredStep"
+    },
+    {
+      "dependencies": [],
+      "kind": "theorem",
+      "name": "StateCut.filteredStep.eq_1"
+    },
+    {
+      "dependencies": [
+        "Quot.sound",
+        "propext"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.filteredStep_eq"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "definition",
+      "name": "StateCut.finiteEnvelope"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.finite_abs_sum_bound"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.finite_abs_sum_bound._proof_1"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.finite_envelope_attained"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.finite_envelope_attained._proof_1"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.finite_envelope_attained._proof_2"
+    },
+    {
+      "dependencies": [
+        "propext"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.finite_envelope_attained._proof_3"
+    },
+    {
+      "dependencies": [
+        "propext"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.finite_envelope_attained._proof_4"
+    },
+    {
+      "dependencies": [
+        "propext"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.finite_envelope_attained._proof_5"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.finite_envelope_le_chord"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.finite_positive_part_bound"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.finite_positive_part_bound._proof_1"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.finite_residual_bound"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.finite_to_cell"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.first_moment_shift"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.floor_remainder_contract"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.frontier_sum_bounds"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.greedy_unique"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.half_width_deviation"
+    },
+    {
+      "dependencies": [],
+      "kind": "theorem",
+      "name": "StateCut.indistinguishable_observations"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.intersect_preserves"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.mass_bounds"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.moment_residual_bounds"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.moment_residual_sound"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.moment_to_cell"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.moment_to_exact_cut"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.monotone_weight_bounds"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.ratio_from_cross_checks"
+    },
+    {
+      "dependencies": [
+        "propext"
+      ],
+      "kind": "definition",
+      "name": "StateCut.rationalArgmaxGate"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.rationalArgmaxGate_sound"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.rationalArgmaxGate_sound._proof_1"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "definition",
+      "name": "StateCut.residualCenter"
+    },
+    {
+      "dependencies": [],
+      "kind": "theorem",
+      "name": "StateCut.residualCenter._proof_1"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.residualCenter.eq_1"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.residualCenter_shift"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.residual_cell_membership"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.residual_center_identity"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.residual_lower"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.residual_lower_attained"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.residual_lower_strict"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.residual_sum_identity"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.residual_to_cell"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.residual_upper"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.residual_upper_attained"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.residual_upper_strict"
+    },
+    {
+      "dependencies": [],
+      "kind": "theorem",
+      "name": "StateCut.rounding_cut"
+    },
+    {
+      "dependencies": [],
+      "kind": "definition",
+      "name": "StateCut.run"
+    },
+    {
+      "dependencies": [],
+      "kind": "definition",
+      "name": "StateCut.run._sunfold"
+    },
+    {
+      "dependencies": [],
+      "kind": "definition",
+      "name": "StateCut.run._unsafe_rec"
+    },
+    {
+      "dependencies": [],
+      "kind": "definition",
+      "name": "StateCut.run.match_1"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.signed_block_bounds"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.signed_block_bounds._proof_1"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.signed_term_bounds"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.singleton_writes"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.split_preserves_bounds"
+    },
+    {
+      "dependencies": [],
+      "kind": "theorem",
+      "name": "StateCut.state_frontier"
+    },
+    {
+      "dependencies": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.summary_to_exact_cut"
+    },
+    {
+      "dependencies": [],
+      "kind": "theorem",
+      "name": "StateCut.terminal_cut"
+    },
+    {
+      "dependencies": [],
+      "kind": "theorem",
+      "name": "StateCut.token_only_is_insufficient"
+    },
+    {
+      "dependencies": [],
+      "kind": "theorem",
+      "name": "StateCut.unobserved_transient_is_irrelevant"
+    },
+    {
+      "dependencies": [
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.vector_rounding_cut"
+    },
+    {
+      "dependencies": [
+        "Quot.sound",
+        "propext"
+      ],
+      "kind": "theorem",
+      "name": "StateCut.write_frontier_future"
+    }
+  ],
+  "dependency_revisions": {
+    "Cli": "02dbd02bc00ec4916e99b04b2245b30200e200d0",
+    "LeanSearchClient": "25078369972d295301f5a1e53c3e5850cf6d9d4c",
+    "Qq": "fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02",
+    "aesop": "5d50b08dedd7d69b3d9b3176e0d58a23af228884",
+    "batteries": "f5d04a9c4973d401c8c92500711518f7c656f034",
+    "importGraph": "e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b",
+    "mathlib": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+    "plausible": "77e08eddc486491d7b9e470926b3dbe50319451a",
+    "proofwidgets": "c4919189477c3221e6a204008998b0d724f49904"
+  },
+  "environment": [
+    "2026-09-05T22:03:04Z",
+    "Linux 6.8.0-1046-nvidia-64k aarch64",
+    "Lean (version 4.19.0, aarch64-unknown-linux-gnu, commit 6caaee842e94, Release)",
+    "Lake version 5.0.0-6caaee8 (Lean version 4.19.0)"
+  ],
+  "formalized_results": [
+    "Signed and centered residual bounds, including the original moment chord envelope",
+    "Finite-count absolute envelope bound, chord dominance, and residual containment",
+    "Constructive finite-envelope attainment for k<n and extremal weight choices",
+    "Mathematical floor remainder contract",
+    "Translation invariance of the complete chord envelope and residual center",
+    "Closed, open, and mixed-endpoint exact rounding from residual checks",
+    "Tie-aware greedy equality, exact persistent writes, and all-future deterministic trace equality"
+  ],
+  "lean_version": "Lean (version 4.19.0, aarch64-unknown-linux-gnu, commit 6caaee842e94, Release)",
+  "log_sha256": {
+    "build.log": "b2c9770852860a2f5a5b7ab785eee8c2a03fee091dceacaf6ecaddc00c712501",
+    "cache.log": "22dd8946797d09b24371c071b444f6fcff0a45cb7fe0b6ab92ec244a391d53d7",
+    "dependencies.log": "7f4a713e50ea99290d401148c760d34aaf48f17d975258aa79b43e5f5caf9d17",
+    "environment.log": "e3f26544ade959fbf738f7ff7669be2cea1033b6faab170f57516c74e3e9f258"
+  },
+  "mathlib_revision": "c44e0c8ee63ca166450922a373c7409c5d26b00b",
+  "recorded_utc": "2026-09-05T22:03:21.333989+00:00",
+  "scope_notes": {
+    "arithmetic": "Real-valued mathematics; range bounds and summary sums are premises.",
+    "backend": "No numerical bridge is discharged for a deployed attention backend. Python/CUDA binaries, extraction auxiliaries and hardware execution are outside the proof audit.",
+    "finite_count": "The finite envelope uses an integer k and remainder c. A separate mathematical floor theorem supplies the range and sum decomposition. Python floor/code correspondence is not formalized.",
+    "rounding": "Cell endpoint inclusivity and the cell-to-rounding contract are explicit premises. Concrete BF16 encoding, ties, overflow and cell generation are not formalized.",
+    "sharpness": "An explicit attaining real row list is proved for k<n; endpoint choices attain both residual extrema for a fixed real row family within an independent weight box.",
+    "state": "Persistent state is abstract and must include every future-observable mutable component; the concrete forest/interpreter implementation is not refined to the theorem."
+  },
+  "source_sha256": {
+    "lean/Audit.lean": "94c840c9db89286bf42f5d4b0731428b393c25d0363bf86cd2af8fa245221a08",
+    "lean/StateCut.lean": "6549ae68d1b0860e9445b2f1297d89c6930c8e072968fb88c9d242074eb25b7b",
+    "lean/StateCut/Bounds.lean": "da1e4f751b795bfc981839b72fb31eee5fdd61688fb269ff8afa2a809ba13ed8",
+    "lean/StateCut/Cell.lean": "0be57ba98607ad4d6073e0f92c046c422da87b7dc6906632c18372d1a7b1b68d",
+    "lean/StateCut/Composition.lean": "94d32b32e82a8db2d2498e4c5d4622f1709bf1e0303656dd570087d4f6c81468",
+    "lean/StateCut/Cuts.lean": "f3dde7bdce6d0fc1cf733f624b05d542c0f874403fd6580d1d120a4411605166",
+    "lean/StateCut/FiniteEnvelope.lean": "e7f0cb2f6d6bf0b24c8d228d55acf8b71fcd3a397308d14444713c5fe55222b2",
+    "lean/StateCut/Frontier.lean": "02b8cbc9142eba161e687a379f91e111699c8b2ec1fd62f3034b567fbef76990",
+    "lean/StateCut/Residual.lean": "e73a83f802f94e28fcd3005f7a47566347e8e2eb35086fda2c0c4deae28d1098",
+    "lean/StateCut/ResidualCut.lean": "d4f4e2c3ad20286d60fe13b15451b7f40040a7fb2c9cdd7e770c33c5f2855af8",
+    "lean/StateCut/State.lean": "b52c000d5006b06bb8774c2976cce7e38b9c0ec053c8a1da2334d4867b82c82f",
+    "lean/StateCut/WriteFrontier.lean": "fba6f7119bcf49c416640c731109f82f0e00c7b3d4df67fa84cdcddd4a622c6f",
+    "lean/lake-manifest.json": "97d7597a4c29cd97a0dd6972f5d9915eef00075401ad6ce5561b02bf651154cb",
+    "lean/lakefile.toml": "e987d770c1260165e670fa2b831b95ffe60bd1c406ceb96a8967920949a9003e",
+    "lean/lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea",
+    "scripts/check_lean.sh": "fe99e0db9c34fdb3cc5b063d45fdc8d05d3c447b54e442ecf716c15a09fdf4b0"
+  },
+  "source_theorem_count": 66,
+  "source_theorems": {
+    "StateCut.abs_chord_mul": "lean/StateCut/Residual.lean",
+    "StateCut.abs_chord_sum": "lean/StateCut/Residual.lean",
+    "StateCut.abs_eq_two_max_sub": "lean/StateCut/FiniteEnvelope.lean",
+    "StateCut.all_future_equal": "lean/StateCut/State.lean",
+    "StateCut.argmax_certificate": "lean/StateCut/Cuts.lean",
+    "StateCut.backend_bridge_cell": "lean/StateCut/Cell.lean",
+    "StateCut.backend_bridge_gate": "lean/StateCut/Residual.lean",
+    "StateCut.balanced_margin": "lean/StateCut/Residual.lean",
+    "StateCut.centered_first_moment": "lean/StateCut/Residual.lean",
+    "StateCut.centered_residual_bound": "lean/StateCut/Residual.lean",
+    "StateCut.certified_greedy_equals_reference": "lean/StateCut/Cuts.lean",
+    "StateCut.checked_cut_transition": "lean/StateCut/Composition.lean",
+    "StateCut.checked_write_frontier": "lean/StateCut/WriteFrontier.lean",
+    "StateCut.chordEnvelope_shift": "lean/StateCut/ResidualCut.lean",
+    "StateCut.constant_value_residual": "lean/StateCut/Residual.lean",
+    "StateCut.constant_weight_attention": "lean/StateCut/Bounds.lean",
+    "StateCut.disjoint_split_count": "lean/StateCut/Frontier.lean",
+    "StateCut.disjoint_split_sum": "lean/StateCut/Frontier.lean",
+    "StateCut.dot_box": "lean/StateCut/Bounds.lean",
+    "StateCut.exact_cut_suffix": "lean/StateCut/State.lean",
+    "StateCut.exp_weight_bounds": "lean/StateCut/Bounds.lean",
+    "StateCut.filteredStep_eq": "lean/StateCut/State.lean",
+    "StateCut.finite_abs_sum_bound": "lean/StateCut/FiniteEnvelope.lean",
+    "StateCut.finite_envelope_attained": "lean/StateCut/FiniteEnvelope.lean",
+    "StateCut.finite_envelope_le_chord": "lean/StateCut/FiniteEnvelope.lean",
+    "StateCut.finite_positive_part_bound": "lean/StateCut/FiniteEnvelope.lean",
+    "StateCut.finite_residual_bound": "lean/StateCut/FiniteEnvelope.lean",
+    "StateCut.finite_to_cell": "lean/StateCut/FiniteEnvelope.lean",
+    "StateCut.first_moment_shift": "lean/StateCut/Residual.lean",
+    "StateCut.floor_remainder_contract": "lean/StateCut/FiniteEnvelope.lean",
+    "StateCut.frontier_sum_bounds": "lean/StateCut/Frontier.lean",
+    "StateCut.greedy_unique": "lean/StateCut/Cuts.lean",
+    "StateCut.half_width_deviation": "lean/StateCut/Residual.lean",
+    "StateCut.indistinguishable_observations": "lean/StateCut/State.lean",
+    "StateCut.intersect_preserves": "lean/StateCut/Frontier.lean",
+    "StateCut.mass_bounds": "lean/StateCut/Bounds.lean",
+    "StateCut.moment_residual_bounds": "lean/StateCut/ResidualCut.lean",
+    "StateCut.moment_residual_sound": "lean/StateCut/Residual.lean",
+    "StateCut.moment_to_cell": "lean/StateCut/Cell.lean",
+    "StateCut.moment_to_exact_cut": "lean/StateCut/ResidualCut.lean",
+    "StateCut.monotone_weight_bounds": "lean/StateCut/Bounds.lean",
+    "StateCut.ratio_from_cross_checks": "lean/StateCut/Bounds.lean",
+    "StateCut.rationalArgmaxGate_sound": "lean/StateCut/Composition.lean",
+    "StateCut.residualCenter_shift": "lean/StateCut/ResidualCut.lean",
+    "StateCut.residual_cell_membership": "lean/StateCut/Cell.lean",
+    "StateCut.residual_center_identity": "lean/StateCut/Residual.lean",
+    "StateCut.residual_lower": "lean/StateCut/Residual.lean",
+    "StateCut.residual_lower_attained": "lean/StateCut/FiniteEnvelope.lean",
+    "StateCut.residual_lower_strict": "lean/StateCut/Residual.lean",
+    "StateCut.residual_sum_identity": "lean/StateCut/ResidualCut.lean",
+    "StateCut.residual_to_cell": "lean/StateCut/Cell.lean",
+    "StateCut.residual_upper": "lean/StateCut/Residual.lean",
+    "StateCut.residual_upper_attained": "lean/StateCut/FiniteEnvelope.lean",
+    "StateCut.residual_upper_strict": "lean/StateCut/Residual.lean",
+    "StateCut.rounding_cut": "lean/StateCut/Cuts.lean",
+    "StateCut.signed_block_bounds": "lean/StateCut/Bounds.lean",
+    "StateCut.signed_term_bounds": "lean/StateCut/Bounds.lean",
+    "StateCut.singleton_writes": "lean/StateCut/WriteFrontier.lean",
+    "StateCut.split_preserves_bounds": "lean/StateCut/Frontier.lean",
+    "StateCut.state_frontier": "lean/StateCut/State.lean",
+    "StateCut.summary_to_exact_cut": "lean/StateCut/Composition.lean",
+    "StateCut.terminal_cut": "lean/StateCut/State.lean",
+    "StateCut.token_only_is_insufficient": "lean/StateCut/Frontier.lean",
+    "StateCut.unobserved_transient_is_irrelevant": "lean/StateCut/WriteFrontier.lean",
+    "StateCut.vector_rounding_cut": "lean/StateCut/Cuts.lean",
+    "StateCut.write_frontier_future": "lean/StateCut/WriteFrontier.lean"
+  },
+  "status": "compiled_and_audited",
+  "theorem_names": [
+    "StateCut.abs_chord_mul",
+    "StateCut.abs_chord_sum",
+    "StateCut.abs_eq_two_max_sub",
+    "StateCut.all_future_equal",
+    "StateCut.argmax_certificate",
+    "StateCut.backend_bridge_cell",
+    "StateCut.backend_bridge_gate",
+    "StateCut.balanced_margin",
+    "StateCut.centered_first_moment",
+    "StateCut.centered_residual_bound",
+    "StateCut.certified_greedy_equals_reference",
+    "StateCut.checked_cut_transition",
+    "StateCut.checked_write_frontier",
+    "StateCut.chordEnvelope_shift",
+    "StateCut.constant_value_residual",
+    "StateCut.constant_weight_attention",
+    "StateCut.disjoint_split_count",
+    "StateCut.disjoint_split_sum",
+    "StateCut.dot_box",
+    "StateCut.exact_cut_suffix",
+    "StateCut.exp_weight_bounds",
+    "StateCut.filteredStep_eq",
+    "StateCut.finite_abs_sum_bound",
+    "StateCut.finite_envelope_attained",
+    "StateCut.finite_envelope_le_chord",
+    "StateCut.finite_positive_part_bound",
+    "StateCut.finite_residual_bound",
+    "StateCut.finite_to_cell",
+    "StateCut.first_moment_shift",
+    "StateCut.floor_remainder_contract",
+    "StateCut.frontier_sum_bounds",
+    "StateCut.greedy_unique",
+    "StateCut.half_width_deviation",
+    "StateCut.indistinguishable_observations",
+    "StateCut.intersect_preserves",
+    "StateCut.mass_bounds",
+    "StateCut.moment_residual_bounds",
+    "StateCut.moment_residual_sound",
+    "StateCut.moment_to_cell",
+    "StateCut.moment_to_exact_cut",
+    "StateCut.monotone_weight_bounds",
+    "StateCut.ratio_from_cross_checks",
+    "StateCut.rationalArgmaxGate_sound",
+    "StateCut.residualCenter_shift",
+    "StateCut.residual_cell_membership",
+    "StateCut.residual_center_identity",
+    "StateCut.residual_lower",
+    "StateCut.residual_lower_attained",
+    "StateCut.residual_lower_strict",
+    "StateCut.residual_sum_identity",
+    "StateCut.residual_to_cell",
+    "StateCut.residual_upper",
+    "StateCut.residual_upper_attained",
+    "StateCut.residual_upper_strict",
+    "StateCut.rounding_cut",
+    "StateCut.signed_block_bounds",
+    "StateCut.signed_term_bounds",
+    "StateCut.singleton_writes",
+    "StateCut.split_preserves_bounds",
+    "StateCut.state_frontier",
+    "StateCut.summary_to_exact_cut",
+    "StateCut.terminal_cut",
+    "StateCut.token_only_is_insufficient",
+    "StateCut.unobserved_transient_is_irrelevant",
+    "StateCut.vector_rounding_cut",
+    "StateCut.write_frontier_future"
+  ],
+  "toolchain": "leanprover/lean4:v4.19.0",
+  "unexpected_dependencies": []
+}

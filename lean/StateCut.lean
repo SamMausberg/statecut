@@ -6,6 +6,8 @@ import StateCut.Composition
 import StateCut.Residual
 import StateCut.Frontier
 import StateCut.WriteFrontier
+import StateCut.Cell
+import StateCut.FiniteEnvelope
 
 -- Review the actual axiom dependencies after a successful build.
 #print axioms StateCut.signed_term_bounds
@@ -38,3 +40,19 @@ import StateCut.WriteFrontier
 #print axioms StateCut.write_frontier_future
 
 #print axioms StateCut.moment_to_exact_cut
+#print axioms StateCut.chordEnvelope_shift
+#print axioms StateCut.residualCenter_shift
+#print axioms StateCut.moment_residual_bounds
+#print axioms StateCut.residual_cell_membership
+#print axioms StateCut.residual_to_cell
+#print axioms StateCut.moment_to_cell
+#print axioms StateCut.backend_bridge_cell
+#print axioms StateCut.finite_positive_part_bound
+#print axioms StateCut.finite_abs_sum_bound
+#print axioms StateCut.finite_residual_bound
+#print axioms StateCut.finite_envelope_le_chord
+#print axioms StateCut.finite_envelope_attained
+#print axioms StateCut.floor_remainder_contract
+#print axioms StateCut.finite_to_cell
+#print axioms StateCut.residual_upper_attained
+#print axioms StateCut.residual_lower_attained

@@ -1,0 +1,32 @@
+# Formal verification audit
+
+The pinned Lean 4.19.0 build succeeds on the GH200's aarch64 host. It checks **66 source theorems** across ten mathematical modules. The dependency audit inspects **96 compiled logical constants**, including **84 theorem constants** after Lean's generated helpers are counted. Every dependency is among `propext`, `Classical.choice`, and `Quot.sound`; there are no placeholder proofs or application-specific unproved assumptions introduced as declarations.
+
+The reproducible machine-readable record is [summary.json](../results/gh200/formal/summary.json). It contains every source theorem name, every audited constant and dependency, exact dependency revisions, and SHA-256 hashes of the tested sources and logs. [build.log](../results/gh200/formal/build.log) and [dependencies.log](../results/gh200/formal/dependencies.log) retain the full successful output. [initial-build.log](../results/gh200/formal/initial-build.log) records the first build's two errors: the real-valued `chordEnvelope` and `residualCenter` definitions needed `noncomputable`. The repair changes their compilation status, not their mathematical definitions.
+
+Run `bash scripts/check_lean.sh` from the repository root with the pinned toolchain available on `PATH`. Dependencies remain in `lean/.lake/`, using the committed [lockfile](../lean/lake-manifest.json). The script checks that all dependency checkouts match the locked revisions and have no modified tracked source, builds the library, then runs [Audit.lean](../lean/Audit.lean). `STATECUT_FORMAL_LOG_DIR` can select another output directory. A failed rerun removes the previous successful summary before starting.
+
+The audit enumerates the compiled `StateCut` namespace and checks the transitive dependencies of each logical constant. It also verifies that every source theorem appears in that inventory. Lean emits 14 extraction-stage runtime auxiliaries for ordinary executable definitions; their exact names are separately recorded and they are outside the kernel-proof inventory. Only auxiliaries whose names contain the compiler's `._cstage` marker are excluded; other unchecked declarations reject the audit. The source guard rejects unchecked proof/declaration tokens, including in the audit source itself. The executable extraction pipeline is not proved by this process.
+
+The newly compiled results are:
+
+| Result | Source theorem | What its premises establish |
+|---|---|---|
+| Complete translation invariance | `chordEnvelope_shift`, `residualCenter_shift` | Shifting every value, range endpoint and threshold by the same real amount preserves the summary expressions |
+| General rounding cells | `residual_cell_membership`, `residual_to_cell`, `moment_to_cell` | Positive mass, sound residual endpoints and independently strict/nonstrict sign tests imply the supplied rounding-cell contract |
+| Backend cell transfer | `backend_bridge_cell` | A proved absolute backend-error bound and inward-shifted endpoint tests imply cell membership |
+| Finite-count positive-part bound | `finite_positive_part_bound` | Count, sum and value bounds control the sum of positive threshold deviations |
+| Finite-count absolute envelope | `finite_abs_sum_bound` | Every row family with the stated integer decomposition obeys the sharpened absolute-sum bound |
+| Dominance over the chord | `finite_envelope_le_chord` | The sharpened envelope is no larger than the original chord envelope when `l < u` |
+| Finite-count residual | `finite_residual_bound`, `finite_to_cell` | Independent weight bounds compose with the sharpened absolute envelope and a rounding-cell contract |
+| Attaining rows | `finite_envelope_attained` | For `k < n`, an explicit list of endpoint values and one remainder has the stated count, sum, range bounds and absolute sum |
+| Attaining weight choices | `residual_upper_attained`, `residual_lower_attained` | Choosing independent weight-box endpoints by deviation sign attains each residual extreme for fixed values |
+| Floor remainder | `floor_remainder_contract` | Mathematical natural floor supplies a remainder in `[l,u)` and the exact sum decomposition |
+
+The finite-count proof is direct. Write `p` for the number of actual values above the threshold and `A+ = sum max(v_i-t,0)`. For `l <= t <= u`, the value bounds imply `A+ <= p(u-t)`, while the sum and lower bound imply `A+ <= S-n*l-p(t-l)`. An integer `p` satisfies either `p <= k` or `p >= k+1`. Substituting `S = k*u+(n-k-1)*l+c` in those cases gives `A+ <= k(u-t)+max(c-t,0)`. The identity `abs(x) = 2*max(x,0)-x` gives the absolute envelope. Outside the value range, the absolute sum is linear and exact. Thus no assumed optimization result is needed for the upper bound.
+
+The mathematical statement permits any integer `k` and real `c` satisfying its explicit sum and range premises. The attaining-list theorem additionally requires `k < n`; the implementation's all-upper endpoint and constant-range branches are elementary special cases rather than part of that list theorem. The floor theorem proves mathematical floor arithmetic, not correspondence with Python's implementation. All sharpness statements concern the independent weight-box abstraction and real row values; they do not assert realizability by a trained model or a particular finite-format input grid.
+
+The inherited results are also compiled: signed block and mass bounds, key-box dot products, real exponential monotonicity, positive normalization, monotone rounding, the smallest-index greedy tie rule, disjoint frontier sums, exact persistent writes, and equality of arbitrary deterministic future traces. The full theorem-to-file inventory is in the JSON record.
+
+The formal boundary remains explicit. Summary provenance and real-valued range bounds are premises. Concrete BF16 encoding, signed-zero treatment, midpoint ownership, overflow behavior and cell generation are not formalized; the new cell theorem handles all four endpoint-inclusion combinations once the cell contract is supplied. No refinement theorem relates the Python or CUDA implementations to these mathematical functions. The concrete forest, interpreter, compiler, directed floating-point operations, GPU execution and pretrained backend bridge remain outside the proof. The state theorem requires the abstract state to include every future-observable mutable component. These compiled proofs establish mathematical certificate soundness and composition, not an end-to-end verified deployed attention replacement.
