@@ -1,0 +1,39 @@
+{
+  "grid_accepted_cases": 20117,
+  "grid_binary64_exponents_covered": 2047,
+  "grid_invalid_input_rejections": 5,
+  "grid_oracle": "independent Fraction divmod, exact half comparison, and integer parity",
+  "grid_overflow_rejections": 238,
+  "proof_reuse": "StateCut.monotone_weight_bounds already proves generic monotone endpoint transport; no new Lean theorem is needed.",
+  "random_seed": 624091,
+  "recorded_utc": "2026-09-05T22:15:07.905510+00:00",
+  "scale_counterexample": {
+    "actual_product_hex": "0x0.0p+0",
+    "exact_product": "2^-1133",
+    "impact": "Power-of-two scaling alone is insufficient. The reviewed audit now restricts to exactly 1/8; its BF16 scaling is exact.",
+    "input_hex": "0x1.0000000000000p-133",
+    "scale_hex": "0x1.0000000000000p-1000"
+  },
+  "scope": "Independent edge tests and mathematical review, not formal proof of CUDA or PyTorch implementation.",
+  "source_sha256": {
+    "cuda/interval.cuh": "7d6e3d81dba734b34b316fd1cab19fc89c7fe57b6d639281521ae4f03af3239a",
+    "cuda/residual.cuh": "691e514e4575dca60be99c36b8d37e07809749e2fda2faab5723414f91ac802b",
+    "results/gh200/formal/review_cuda_numerics.py": "7722d224b6e9a9eb1102f9bbb313fbc3ce6480e10ae0aa264f50b60930ec661a",
+    "scripts/audit_capture_cuda.py": "ff11789b9dd45995f94c78335725a6d9a6de7d022627a9afcd7671cb62530029"
+  },
+  "sum_guard_accepted_arrays": 56,
+  "sum_guard_exact_partial_additions_checked": 2916,
+  "sum_guard_rejected_arrays": 35,
+  "weight_endpoint_checks": {
+    "statecut_device_residual": {
+      "binary_sha256": "74a75a5d87b07ab937862f1284f3da98b016b0cda83eed3d7f063235ecf82ee0",
+      "exact_points": 8,
+      "passed": 45
+    },
+    "statecut_host_residual": {
+      "binary_sha256": "d4f38ebff1108941529f11053a955131a2e1ad2fda14d549f294c7a4f7b49cf0",
+      "exact_points": 8,
+      "passed": 45
+    }
+  }
+}
