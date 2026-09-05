@@ -21,7 +21,8 @@ This profile is an explicitly defined numerical research reference. It is not an
 * The fixture's SiLU-like gate computes `RNE_BF16(x/(1+E_24(-x)))`. Its formula is part of this profile; it is not libdevice SiLU.
 * Greedy decoding selects the smallest vocabulary index among equal maximal materialized logits. There is no stochastic sampling.
 
-The bounded exp evaluator may raise a resource-limit error. It never substitutes an approximate value when rounding is unresolved. The correctness claim is partial correctness of successful executions; a resource failure is not a valid prediction. The mathematical filter's termination theorem assumes its exact-reference primitive/fallback calls terminate. The Python fixture uses finite, modest-sized inputs for which the recorded tests completed.
+The bounded exp evaluator supports scores through ±2048 and budgets initial
+precision according to positive score magnitude. It may raise a resource-limit error. It never substitutes an approximate value when rounding is unresolved. The correctness claim is partial correctness of successful executions; a resource failure is not a valid prediction. The mathematical filter's termination theorem assumes its exact-reference primitive/fallback calls terminate. The Python fixture uses finite, modest-sized inputs for which the recorded tests completed.
 
 ## Inherited real-softmax CUDA draft
 
@@ -34,11 +35,13 @@ A CUDA BF16 certificate for a deployed backend requires a sound bound `epsilon[j
 ## New E24 CUDA local-gate draft
 
 `cuda/residual_frontier.cu` is different from the inherited real-softmax code.
-It encloses E24 weights by enclosing real exp and widening by an absolute
-half-quantum `2^-25`, then evaluates count/sum/range residual bounds at exact
-BF16 cell endpoints. It supports dimensions 1 through 128 and requires trusted
+It encloses E24 weights by monotonically rounding outward real-exponential
+endpoints onto the E24 lattice, then evaluates count/sum/range residual bounds
+at exact BF16 cell endpoints. Scores at most -25 have exactly zero E24 weight;
+positive endpoints above 64 still fail closed. It supports dimensions 1 through 128 and requires trusted
 outward summaries and a positive mass bound. It returns local head flags, not
-full token or state certificates. The code was not compiled or executed here.
+full token or state certificates. The current code is compiled and tested on
+the GH200; see `CUDA_NUMERICAL_REVIEW.md` for its arithmetic proof and tests.
 No deployed-backend error bridge is supplied by this gate.
 
 The Python `TreeModel` preserves the inherited E24 target while adding a forest

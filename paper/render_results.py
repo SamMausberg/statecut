@@ -152,7 +152,7 @@ def runtime(directory: Path) -> None:
             "Pretrained observer transparency, compared to the unchanged backend. State comparisons include prefill and every decode step; events are captured decode attention calls. This does not run a filtered replacement.",
             "tab:pretrained", "lrrrr", r"Model & Cases & Steps & States & Events \\", capture_rows))
         parts.append("The observer study uses pinned checkpoint revisions, three deterministic prompt constructions at contexts 128 and 512, and three decode steps per case. "
-                     "All recorded per-layer KV tensors and final-position logits agree bitwise with the unobserved run. "
+                     "All recorded per-layer KV tensors agree bitwise and final-position logits agree in value with the unobserved run. "
                      "It tests capture transparency; it does not test StateCut as a model replacement. Checkpoint hashes and exact prompt token IDs are retained in the source records.")
     else:
         parts.append("No completed pretrained observer result is present in the selected run directory.")

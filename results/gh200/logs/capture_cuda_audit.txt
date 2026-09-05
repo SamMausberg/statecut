@@ -1,0 +1,12 @@
+Audited HuggingFaceTB/SmolLM2-135M prose 128: 90 calls
+Audited HuggingFaceTB/SmolLM2-135M repeated 128: 90 calls
+Audited HuggingFaceTB/SmolLM2-135M code 128: 90 calls
+Audited HuggingFaceTB/SmolLM2-135M prose 512: 90 calls
+Audited HuggingFaceTB/SmolLM2-135M repeated 512: 90 calls
+Audited HuggingFaceTB/SmolLM2-135M code 512: 90 calls
+Audited Qwen/Qwen2.5-0.5B prose 128: 72 calls
+Audited Qwen/Qwen2.5-0.5B repeated 128: 72 calls
+Audited Qwen/Qwen2.5-0.5B code 128: 72 calls
+Audited Qwen/Qwen2.5-0.5B prose 512: 72 calls
+Audited Qwen/Qwen2.5-0.5B repeated 512: 72 calls
+Audited Qwen/Qwen2.5-0.5B code 512: 72 calls

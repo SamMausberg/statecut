@@ -1,0 +1,62 @@
+.................................................................F..F... [ 53%]
+...............................................................          [100%]
+=================================== FAILURES ===================================
+___________________ test_capture_restores_and_preserves_bits ___________________
+
+tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-0/test_capture_restores_and_pres0')
+
+    def test_capture_restores_and_preserves_bits(tmp_path):
+        fn = torch.nn.functional.scaled_dot_product_attention
+        q,k,v = tensors()
+        expected = fn(q,k,v)
+        with CaptureSDPA(tmp_path/"probe", allow_cpu=True) as cap:
+>           got = torch.nn.functional.scaled_dot_product_attention(q,k,v)
+
+tests/test_capture.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/statecut/capture.py:101: in wrapped
+    self._record(args, kwargs, result)
+src/statecut/capture.py:85: in _record
+    np.savez(path, q=bits(q), k=bits(k), v=bits(v), out=bits(out),
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = tensor([[[[1., 1., 1., 1.]],
+
+         [[1., 1., 1., 1.]]]], dtype=torch.bfloat16)
+
+    def bits(x):
+>       return x.detach().contiguous().view(torch.int16).cpu().numpy().view(np.uint16)
+E       RuntimeError: Numpy is not available
+
+src/statecut/capture.py:75: RuntimeError
+____________________ test_grouped_query_mapping_is_recorded ____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-ubuntu/pytest-0/test_grouped_query_mapping_is_0')
+
+    def test_grouped_query_mapping_is_recorded(tmp_path):
+        q,k,v=tensors()
+        k,v=k[:,:1],v[:,:1]
+        with CaptureSDPA(tmp_path/"gqa",allow_cpu=True) as cap:
+>           actual=torch.nn.functional.scaled_dot_product_attention(q,k,v,enable_gqa=True)
+
+tests/test_capture.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/statecut/capture.py:101: in wrapped
+    self._record(args, kwargs, result)
+src/statecut/capture.py:85: in _record
+    np.savez(path, q=bits(q), k=bits(k), v=bits(v), out=bits(out),
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+x = tensor([[[[1., 1., 1., 1.]],
+
+         [[1., 1., 1., 1.]]]], dtype=torch.bfloat16)
+
+    def bits(x):
+>       return x.detach().contiguous().view(torch.int16).cpu().numpy().view(np.uint16)
+E       RuntimeError: Numpy is not available
+
+src/statecut/capture.py:75: RuntimeError
+=========================== short test summary info ============================
+FAILED tests/test_capture.py::test_capture_restores_and_preserves_bits - Runt...
+FAILED tests/test_capture.py::test_grouped_query_mapping_is_recorded - Runtim...
+2 failed, 133 passed in 15.46s

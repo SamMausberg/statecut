@@ -1,0 +1,42 @@
+Obtaining file:///home/ubuntu/statecut
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Collecting pytest==9.0.2
+  Downloading pytest-9.0.2-py3-none-any.whl (374 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 374.8/374.8 KB 11.9 MB/s eta 0:00:00
+Collecting mpmath==1.3.0
+  Downloading mpmath-1.3.0-py3-none-any.whl (536 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 536.2/536.2 KB 79.4 MB/s eta 0:00:00
+Collecting tomli>=1
+  Downloading tomli-2.4.1-py3-none-any.whl (14 kB)
+Collecting pluggy<2,>=1.5
+  Downloading pluggy-1.6.0-py3-none-any.whl (20 kB)
+Collecting packaging>=22
+  Using cached packaging-26.3-py3-none-any.whl (129 kB)
+Collecting exceptiongroup>=1
+  Downloading exceptiongroup-1.3.1-py3-none-any.whl (16 kB)
+Collecting iniconfig>=1.0.1
+  Downloading iniconfig-2.3.0-py3-none-any.whl (7.5 kB)
+Collecting pygments>=2.7.2
+  Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 222.4 MB/s eta 0:00:00
+Collecting numpy<3,>=1.24
+  Downloading numpy-2.2.6-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (14.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 14.3/14.3 MB 181.5 MB/s eta 0:00:00
+Collecting typing-extensions>=4.6.0
+  Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.6/45.6 KB 20.2 MB/s eta 0:00:00
+Building wheels for collected packages: statecut
+  Building editable for statecut (pyproject.toml): started
+  Building editable for statecut (pyproject.toml): finished with status 'done'
+  Created wheel for statecut: filename=statecut-0.3.0-0.editable-py3-none-any.whl size=2268 sha256=c902d8f7a5a23d2385c140a9c4496e822fd479a25db7fb4623e9886acfd90957
+  Stored in directory: /tmp/pip-ephem-wheel-cache-6cf5swjd/wheels/0b/a7/8e/6c24e19933551194ba8e7b0d618a1689240d3e7b93a21940c8
+Successfully built statecut
+Installing collected packages: mpmath, typing-extensions, tomli, statecut, pygments, pluggy, packaging, numpy, iniconfig, exceptiongroup, pytest
+Successfully installed exceptiongroup-1.3.1 iniconfig-2.3.0 mpmath-1.3.0 numpy-2.2.6 packaging-26.3 pluggy-1.6.0 pygments-2.21.0 pytest-9.0.2 statecut-0.3.0 tomli-2.4.1 typing-extensions-4.16.0

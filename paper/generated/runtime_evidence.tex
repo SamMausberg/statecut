@@ -18,4 +18,4 @@ SmolLM2-135M & 6 & 18 & 24 & 540 \\
 \end{tabular}
 \end{table}
 
-The observer study uses pinned checkpoint revisions, three deterministic prompt constructions at contexts 128 and 512, and three decode steps per case. All recorded per-layer KV tensors and final-position logits agree bitwise with the unobserved run. It tests capture transparency; it does not test StateCut as a model replacement. Checkpoint hashes and exact prompt token IDs are retained in the source records.
+The observer study uses pinned checkpoint revisions, three deterministic prompt constructions at contexts 128 and 512, and three decode steps per case. All recorded per-layer KV tensors agree bitwise and final-position logits agree in value with the unobserved run. It tests capture transparency; it does not test StateCut as a model replacement. Checkpoint hashes and exact prompt token IDs are retained in the source records.

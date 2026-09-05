@@ -1,0 +1,20 @@
+Obtaining file:///home/ubuntu/statecut
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: statecut
+  Building editable for statecut (pyproject.toml): started
+  Building editable for statecut (pyproject.toml): finished with status 'done'
+  Created wheel for statecut: filename=statecut-0.3.0-0.editable-py3-none-any.whl size=2242 sha256=f993ce1295272f2493a58bc4d09c72e093792ed036f11e9277eb90af5e99df7e
+  Stored in directory: /tmp/pip-ephem-wheel-cache-63m2p7xd/wheels/0b/a7/8e/6c24e19933551194ba8e7b0d618a1689240d3e7b93a21940c8
+Successfully built statecut
+Installing collected packages: statecut
+  Attempting uninstall: statecut
+    Found existing installation: statecut 0.2.0
+    Uninstalling statecut-0.2.0:
+      Successfully uninstalled statecut-0.2.0
+Successfully installed statecut-0.3.0
+
+[notice] A new release of pip is available: 25.3 -> 26.2.1
+[notice] To update, run: /home/ubuntu/statecut/.venv/bin/python -m pip install --upgrade pip

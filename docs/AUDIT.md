@@ -1,6 +1,10 @@
-# Audit of the supplied v0.1.0 and changes in v0.2.0
+# Historical audit of the supplied v0.1.0 and changes in v0.2.0
 
-The original archive is retained as the local git base/tag `v0.1.0`. Its README/manuscript/verification note are archived under `docs/archive/`; its recorded outputs moved to `results/v0.1.0/`. The original reference algorithms and tests remain available as baselines, rather than silently replacing the target arithmetic.
+This is the imported audit. Current v0.3.0 fixes and evidence are in
+[ALGORITHM_AUDIT.md](ALGORITHM_AUDIT.md), [FORMAL_AUDIT.md](FORMAL_AUDIT.md)
+and [results/gh200](../results/gh200/).
+
+The supplied v0.1.0 evidence is retained in the archive directories; the GitHub repository starts with the v0.2.0 import at `73cd266`. Its README/manuscript/verification note are archived under `docs/archive/`; its recorded outputs moved to `results/v0.1.0/`. The original reference algorithms and tests remain available as baselines, rather than silently replacing the target arithmetic.
 
 ## Findings and response
 

@@ -1,0 +1,40 @@
+{
+  "claim": "E24 correctness test and observational backend comparison only",
+  "backend_replacement_authorized": false,
+  "reason": "no proved enclosure of the pinned deployed floating-point operator",
+  "capture": "results/gh200/captures/qwen2.5-0.5b-repeated-512/capture-0012.npz",
+  "heads_requested": 2,
+  "heads_completed": 2,
+  "supported_heads": 2,
+  "unsupported_heads": 0,
+  "rows": [
+    {
+      "head": 0,
+      "kv_head": 0,
+      "entries": 513,
+      "e24_status": "passed",
+      "e24_equal_dense": true,
+      "e24_cut_accepted_without_fallback": false,
+      "raw_entries": 513,
+      "summary_nodes": 2,
+      "observed_backend_bit_matches": 63,
+      "coordinates": 64,
+      "elapsed_cpu_seconds": 1.1030351999997947,
+      "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+    },
+    {
+      "head": 1,
+      "kv_head": 0,
+      "entries": 513,
+      "e24_status": "passed",
+      "e24_equal_dense": true,
+      "e24_cut_accepted_without_fallback": false,
+      "raw_entries": 513,
+      "summary_nodes": 2,
+      "observed_backend_bit_matches": 58,
+      "coordinates": 64,
+      "elapsed_cpu_seconds": 0.9618895049998173,
+      "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+    }
+  ]
+}

@@ -1,0 +1,1383 @@
+{
+  "scope": "exact E24 filtered-vs-dense parity and observational SDPA bit comparison",
+  "sampling": "first decode step; first, middle and last layer; first requested query heads",
+  "backend_replacement_authorized": false,
+  "all_e24_equal_dense": true,
+  "all_supported_e24_equal_dense": true,
+  "heads_requested": 72,
+  "heads_tested": 72,
+  "unsupported_heads": 0,
+  "coordinates": 4608,
+  "observed_backend_bit_matches": 4107,
+  "accepted_without_fallback": 0,
+  "rows": [
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "prose",
+      "context_tokens": 128,
+      "layer": 0,
+      "capture": "results/gh200/captures/smollm2-135m-prose-128/capture-0000.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-prose-128-layer0.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 55,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.3899813739999445,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 57,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.25851363599986144,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "prose",
+      "context_tokens": 128,
+      "layer": 15,
+      "capture": "results/gh200/captures/smollm2-135m-prose-128/capture-0015.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-prose-128-layer15.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 50,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.39561442400008673,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 54,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.259400044999893,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "prose",
+      "context_tokens": 128,
+      "layer": 29,
+      "capture": "results/gh200/captures/smollm2-135m-prose-128/capture-0029.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-prose-128-layer29.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 59,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.3924325990001307,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 57,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.2595544470000277,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "repeated",
+      "context_tokens": 128,
+      "layer": 0,
+      "capture": "results/gh200/captures/smollm2-135m-repeated-128/capture-0000.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-repeated-128-layer0.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 56,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.38678783600016686,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 56,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.25818854499993904,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "repeated",
+      "context_tokens": 128,
+      "layer": 15,
+      "capture": "results/gh200/captures/smollm2-135m-repeated-128/capture-0015.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-repeated-128-layer15.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 50,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.3941589850001037,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 52,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.26227774000017234,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "repeated",
+      "context_tokens": 128,
+      "layer": 29,
+      "capture": "results/gh200/captures/smollm2-135m-repeated-128/capture-0029.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-repeated-128-layer29.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 57,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.3847037820000878,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.25914893899971503,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "code",
+      "context_tokens": 128,
+      "layer": 0,
+      "capture": "results/gh200/captures/smollm2-135m-code-128/capture-0000.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-code-128-layer0.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 54,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.3859010430001035,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 53,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.25357556900007694,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "code",
+      "context_tokens": 128,
+      "layer": 15,
+      "capture": "results/gh200/captures/smollm2-135m-code-128/capture-0015.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-code-128-layer15.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 50,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.391845808999733,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 45,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.2576338509998095,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "code",
+      "context_tokens": 128,
+      "layer": 29,
+      "capture": "results/gh200/captures/smollm2-135m-code-128/capture-0029.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-code-128-layer29.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 56,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.39109908199998245,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 62,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.2600795719999951,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "prose",
+      "context_tokens": 512,
+      "layer": 0,
+      "capture": "results/gh200/captures/smollm2-135m-prose-512/capture-0000.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-prose-512-layer0.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 59,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.0747160890000487,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 53,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.9556331849998969,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "prose",
+      "context_tokens": 512,
+      "layer": 15,
+      "capture": "results/gh200/captures/smollm2-135m-prose-512/capture-0015.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-prose-512-layer15.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 51,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.10213602299973,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 62,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.965962700000091,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "prose",
+      "context_tokens": 512,
+      "layer": 29,
+      "capture": "results/gh200/captures/smollm2-135m-prose-512/capture-0029.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-prose-512-layer29.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 61,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.1006567099998392,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 62,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.9675974699998733,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "repeated",
+      "context_tokens": 512,
+      "layer": 0,
+      "capture": "results/gh200/captures/smollm2-135m-repeated-512/capture-0000.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-repeated-512-layer0.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 58,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.0722572479999144,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 60,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.0086739939997642,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "repeated",
+      "context_tokens": 512,
+      "layer": 15,
+      "capture": "results/gh200/captures/smollm2-135m-repeated-512/capture-0015.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-repeated-512-layer15.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 51,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.1486588120001215,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 63,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.9786706730001242,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "repeated",
+      "context_tokens": 512,
+      "layer": 29,
+      "capture": "results/gh200/captures/smollm2-135m-repeated-512/capture-0029.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-repeated-512-layer29.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 62,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.0842917730001318,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 62,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.957286546999967,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "code",
+      "context_tokens": 512,
+      "layer": 0,
+      "capture": "results/gh200/captures/smollm2-135m-code-512/capture-0000.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-code-512-layer0.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 57,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.08284747100015,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 56,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.9690216449998843,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "code",
+      "context_tokens": 512,
+      "layer": 15,
+      "capture": "results/gh200/captures/smollm2-135m-code-512/capture-0015.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-code-512-layer15.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 52,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.1202286279999498,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 49,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.0423940880000373,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "HuggingFaceTB/SmolLM2-135M",
+      "prompt": "code",
+      "context_tokens": 512,
+      "layer": 29,
+      "capture": "results/gh200/captures/smollm2-135m-code-512/capture-0029.npz",
+      "result": "results/gh200/e24/SmolLM2-135M-code-512-layer29.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 52,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.1055322170000181,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 62,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.9819739389999995,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "prose",
+      "context_tokens": 128,
+      "layer": 0,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-prose-128/capture-0000.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-prose-128-layer0.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 45,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.5397533020000083,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.7526553580000837,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "prose",
+      "context_tokens": 128,
+      "layer": 12,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-prose-128/capture-0012.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-prose-128-layer12.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.3979138400000011,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 53,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.2572614959999555,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "prose",
+      "context_tokens": 128,
+      "layer": 23,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-prose-128/capture-0023.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-prose-128-layer23.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 47,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.38711811200028023,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.2687301899995873,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "repeated",
+      "context_tokens": 128,
+      "layer": 0,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-repeated-128/capture-0000.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-repeated-128-layer0.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 52,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.5240974899998037,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.3480912560003162,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "repeated",
+      "context_tokens": 128,
+      "layer": 12,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-repeated-128/capture-0012.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-repeated-128-layer12.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 63,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.3956696249997549,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 48,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.2557571279999138,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "repeated",
+      "context_tokens": 128,
+      "layer": 23,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-repeated-128/capture-0023.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-repeated-128-layer23.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 52,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.3921159239998815,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.26756976299975577,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "code",
+      "context_tokens": 128,
+      "layer": 0,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-code-128/capture-0000.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-code-128-layer0.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 54,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.45606129399993733,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 4.017889300999741,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "code",
+      "context_tokens": 128,
+      "layer": 12,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-code-128/capture-0012.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-code-128-layer12.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.3935940840001422,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 44,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.2581083850000141,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "code",
+      "context_tokens": 128,
+      "layer": 23,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-code-128/capture-0023.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-code-128-layer23.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 54,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.3850412260003395,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 129,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 129,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.26623864499970296,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "prose",
+      "context_tokens": 512,
+      "layer": 0,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-prose-512/capture-0000.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-prose-512-layer0.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 56,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.5695751630000814,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 3.8090730459998667,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "prose",
+      "context_tokens": 512,
+      "layer": 12,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-prose-512/capture-0012.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-prose-512-layer12.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.0937603190000118,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 53,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.956717579999804,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "prose",
+      "context_tokens": 512,
+      "layer": 23,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-prose-512/capture-0023.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-prose-512-layer23.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 56,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.0709031209999011,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.9742982419998043,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "repeated",
+      "context_tokens": 512,
+      "layer": 0,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-repeated-512/capture-0000.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-repeated-512-layer0.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 53,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.3156677180004408,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 25.99796310800002,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "repeated",
+      "context_tokens": 512,
+      "layer": 12,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-repeated-512/capture-0012.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-repeated-512-layer12.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 63,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.1030351999997947,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 58,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.9618895049998173,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "repeated",
+      "context_tokens": 512,
+      "layer": 23,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-repeated-512/capture-0023.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-repeated-512-layer23.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 57,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.0779214019999017,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.9723281110000244,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "code",
+      "context_tokens": 512,
+      "layer": 0,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-code-512/capture-0000.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-code-512-layer0.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 42,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.5584626310001113,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 9.90039114000001,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "code",
+      "context_tokens": 512,
+      "layer": 12,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-code-512/capture-0012.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-code-512-layer12.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.086410257999887,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 55,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.9481552500001271,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    },
+    {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "prompt": "code",
+      "context_tokens": 512,
+      "layer": 23,
+      "capture": "results/gh200/captures/qwen2.5-0.5b-code-512/capture-0023.npz",
+      "result": "results/gh200/e24/Qwen2.5-0.5B-code-512-layer23.json",
+      "heads": [
+        {
+          "head": 0,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 59,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 1.068458904000181,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        },
+        {
+          "head": 1,
+          "kv_head": 0,
+          "entries": 513,
+          "e24_status": "passed",
+          "e24_equal_dense": true,
+          "e24_cut_accepted_without_fallback": false,
+          "raw_entries": 513,
+          "summary_nodes": 2,
+          "observed_backend_bit_matches": 64,
+          "coordinates": 64,
+          "elapsed_cpu_seconds": 0.983657188000052,
+          "negative_zero_note": "E24 canonicalizes zero; observed bits are not canonicalized"
+        }
+      ]
+    }
+  ]
+}

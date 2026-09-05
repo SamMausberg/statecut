@@ -1,3 +1,5 @@
+> Historical v0.2.0 manuscript. The current manuscript, authored by Samuel Mausberg, is [ICML-style LaTeX](../paper/main.tex) with [PDF](../paper/main.pdf), TikZ figures, updated proofs and GH200/pretrained results. The uncompiled/unexecuted status statements below describe the imported version.
+
 # StateCut v0.2: denominator-free attention predicates and exact write frontiers
 
 Research manuscript, 5 September 2026. Extends the supplied StateCut v0.1.0.
