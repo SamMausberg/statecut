@@ -1,0 +1,88 @@
+{
+  "python": "3.13.5",
+  "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+  "semantic_profile": "RATIONAL_BF16_V1",
+  "pretrained_model": false,
+  "gpu_present": false,
+  "lean_compiled": false,
+  "attention": [
+    {
+      "case": "constant_keys",
+      "entries": 512,
+      "summary_blocks": 16,
+      "raw_entries_read": 0,
+      "raw_fraction": 0.0,
+      "equal_reference": true,
+      "dense_fallback": false,
+      "cpu_seconds": 0.1235523049999756
+    },
+    {
+      "case": "clustered_keys",
+      "entries": 512,
+      "summary_blocks": 16,
+      "raw_entries_read": 512,
+      "raw_fraction": 1.0,
+      "equal_reference": true,
+      "dense_fallback": true,
+      "cpu_seconds": 0.021987073999980566
+    },
+    {
+      "case": "unstructured",
+      "entries": 512,
+      "summary_blocks": 16,
+      "raw_entries_read": 512,
+      "raw_fraction": 1.0,
+      "equal_reference": true,
+      "dense_fallback": true,
+      "cpu_seconds": 0.02512220900007378
+    },
+    {
+      "case": "dominant_block",
+      "entries": 512,
+      "summary_blocks": 16,
+      "raw_entries_read": 32,
+      "raw_fraction": 0.0625,
+      "equal_reference": true,
+      "dense_fallback": false
+    }
+  ],
+  "trajectories": [
+    {
+      "seed": 0,
+      "steps": 20,
+      "all_tokens_equal": true,
+      "all_kv_equal": true,
+      "reference_raw_entries": 420,
+      "certified_raw_entries": 131,
+      "terminal_early_accepts": 20
+    },
+    {
+      "seed": 1,
+      "steps": 20,
+      "all_tokens_equal": true,
+      "all_kv_equal": true,
+      "reference_raw_entries": 420,
+      "certified_raw_entries": 134,
+      "terminal_early_accepts": 19
+    },
+    {
+      "seed": 2,
+      "steps": 20,
+      "all_tokens_equal": true,
+      "all_kv_equal": true,
+      "reference_raw_entries": 420,
+      "certified_raw_entries": 322,
+      "terminal_early_accepts": 14
+    },
+    {
+      "seed": 3,
+      "steps": 20,
+      "all_tokens_equal": true,
+      "all_kv_equal": true,
+      "reference_raw_entries": 420,
+      "certified_raw_entries": 207,
+      "terminal_early_accepts": 20
+    }
+  ],
+  "note": "Logical raw reads exclude metadata, weights, construction, and writes. CPU timings are not GH200 speedups or controlled comparisons: cold BF16 table initialization and memoized exponentials differ between cases."
+}

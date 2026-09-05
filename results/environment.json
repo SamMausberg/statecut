@@ -1,0 +1,22 @@
+{
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+  "machine": "x86_64",
+  "torch": "2.10.0+cpu",
+  "torch_cuda_version": null,
+  "cuda_available": false,
+  "tools": {
+    "lean": null,
+    "lake": null,
+    "nvcc": null,
+    "nvidia-smi": null,
+    "cmake": "/usr/bin/cmake",
+    "c++": "/usr/bin/c++"
+  },
+  "packages": {
+    "numpy": "2.3.5",
+    "pytest": "9.0.2",
+    "mpmath": "1.3.0",
+    "setuptools": "82.0.1"
+  }
+}

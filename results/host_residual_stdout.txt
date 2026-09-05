@@ -1,0 +1,8 @@
+{
+  "passed": 68292,
+  "moment_cases": 2500,
+  "all_finite_canonical_bf16_cells": 65279,
+  "e24_weight_cases": 513,
+  "device_executed": false,
+  "scope": "host cross-check only; not Lean or CUDA implementation verification"
+}

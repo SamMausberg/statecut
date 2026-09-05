@@ -1,0 +1,9 @@
+{
+  "sdpa_calls_seen": 1,
+  "captures": [
+    "capture-0000.npz"
+  ],
+  "skipped": {},
+  "claim": "capture only; unchanged reference outputs; no certified backend bridge",
+  "coverage_warning": "calls through other aliases or fused backends are not observed"
+}

@@ -1,0 +1,34 @@
+{
+  "version": "0.1.0",
+  "date": "2026-09-05",
+  "mathematical_proof": "Provided with explicit hypotheses; not a proof of a deployed pretrained runtime.",
+  "pytest": {
+    "passed": 85,
+    "log": "results/pytest.txt"
+  },
+  "host_cpp": {
+    "compiled": true,
+    "passed": 2525,
+    "device_intrinsics_executed": false
+  },
+  "lean": {
+    "compiled": false,
+    "reason": "lake/lean unavailable",
+    "proof_escape_tokens_found": false,
+    "mathlib_commit": "c44e0c8ee63ca166450922a373c7409c5d26b00b"
+  },
+  "cuda": {
+    "compiled": false,
+    "executed": false,
+    "reason": "CUDA compiler/toolkit and GPU unavailable"
+  },
+  "pretrained_checkpoint_validated": false,
+  "pinned_backend_error_bridge_proved": false,
+  "gh200_performance_measured": false,
+  "remote_repository_created": false,
+  "cpu_profile": "RATIONAL_BF16_V1",
+  "cuda_profile": "mathematical-real-softmax intervals",
+  "profiles_interchangeable": false,
+  "ci_workflow_supplied_but_not_executed": true,
+  "editable_python_package_install_tested": true
+}

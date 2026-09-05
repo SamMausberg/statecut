@@ -1,0 +1,14 @@
+WARNING: The directory '/home/oai/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Obtaining file:///mnt/data/statecut
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: statecut
+  Building editable for statecut (pyproject.toml): started
+  Building editable for statecut (pyproject.toml): finished with status 'done'
+  Created wheel for statecut: filename=statecut-0.1.0-0.editable-py3-none-any.whl size=2168 sha256=737bd7d12893b9ec9e76ae1f33120cdcb9df2ac281aa0714c4e104eb2c528d32
+  Stored in directory: /tmp/pip-ephem-wheel-cache-ed5s8q8c/wheels/6d/eb/19/d0cdefd61b1de21fe5a231b2b12eb3a048a1248ddb9d6e29a4
+Successfully built statecut
+Installing collected packages: statecut
+Successfully installed statecut-0.1.0

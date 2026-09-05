@@ -1,0 +1,3 @@
+# Versions used for the recorded correctness checks.
+pytest==9.0.2
+mpmath==1.3.0

@@ -1,0 +1,22 @@
+# Primary references and comparison scope
+
+Checked 5 September 2026. Sources are papers, author-maintained research pages, and official technical documentation. Preprints are attributed claims, not independent validation of StateCut.
+
+| ID | Source | Relevance and distinction |
+|---|---|---|
+| R1 | Jonathan Richard Shewchuk. *Adaptive Precision Floating-Point Arithmetic and Fast Robust Predicates for Computational Geometry*. 1997. [Author's project page](https://www.cs.cmu.edu/~quake/robust.html). | Adaptive exact predicates and filtered computation predate this work. StateCut's proposed contribution is the attention residual/write-frontier construction, not the generic accept-or-refine paradigm. |
+| R2 | Tri Dao et al. *FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness*. 2022. [arXiv:2205.14135](https://arxiv.org/abs/2205.14135). | IO-aware exact attention. “Exact” in an algorithmic attention description does not establish bitwise equivalence to every backend. |
+| R3 | Yaniv Leviathan, Matan Kalman, Yossi Matias. *Fast Inference from Transformers via Speculative Decoding*. [arXiv:2211.17192](https://arxiv.org/abs/2211.17192). | Distribution-preserving speculative generation is a different guarantee from this release's deterministic token and state equality. |
+| R4 | PyTorch. [Numerical accuracy](https://docs.pytorch.org/docs/2.14/notes/numerical_accuracy.html). | Nonassociativity and backend/platform/version differences require a named numerical target. |
+| R5 | NVIDIA. [CUDA Programming Guide, Floating-Point Computation](https://docs.nvidia.com/cuda/cuda-programming-guide/05-appendices/mathematical-functions.html). | Accuracy tables state observed, non-exhaustively tested errors, not universal guarantees. Such tables are not accepted as proof premises here. |
+| R6 | NVIDIA. [Grace Performance Tuning Guide](https://docs.nvidia.com/dccpu/grace-perf-tuning-guide/index.html). | Record actual memory placement, topology and hardware configuration for GH200 experiments. |
+| R7 | Dean Calver. *Runtime-Certified Bounded-Error Quantized Attention*. May 2026. [arXiv:2605.20868](https://arxiv.org/abs/2605.20868). | Local attention approximation certificates are relevant prior work; their scope is not automatically a full decoder state theorem. |
+| R8 | Fanzhe Wei, Li Liu, Ziyang Wang, Chenyu Wang. *WitCert: Sound Runtime Risk Observability and Gating for KV-Cache Quantization*. July 2026, revised August. [arXiv:2607.28699](https://arxiv.org/abs/2607.28699). | Runtime witnesses, deterministic/probabilistic evidence levels and gating are prior art. StateCut does not claim novelty for those general ideas. |
+| R9 | Fanzhe Wei, Li Liu, Ziyang Wang, Chenyu Wang. *Runtime Observability for Heterogeneous Attention Memory*. August 2026. [HTML manuscript](https://arxiv.org/html/2608.05863v1). | Typed update/select/read contracts, explicit bridges and honest evidence tiers reinforce the need to separate local algebra from whole-stack guarantees. |
+| R10 | NVIDIA. [Double Precision Intrinsics](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__INTRINSIC__DOUBLE.html). | Contracts for directed device arithmetic used by the CUDA prototype. Not a proof that the supplied program compiles or implements its intended algorithm. |
+| R11 | Hugging Face. [Attention Interface](https://huggingface.co/docs/transformers/attention_interface). | Registering a custom attention function without its mask interface can lose mask construction. The supplied observer leaves the requested SDPA implementation and its mask path intact. |
+| R12 | Lean community. [Lean 4 mathematics library documentation](https://leanprover-community.github.io/mathlib4_docs/). | The repository pins a historical toolchain/dependency revision; current documentation is not a substitute for compiling that pinned revision. |
+
+## Novelty assessment
+
+No exhaustive priority search or “first ever” claim is made. The candidate contribution is narrower than certified attention in general: a count/first-moment/range residual envelope evaluated directly at representable-output boundaries, implemented on an append-only refinement forest and combined with an interval check at complete persistent-write boundaries. The relative benefit of each component is testable through the included ablations. Pretrained generality and competitive system performance remain unestablished.

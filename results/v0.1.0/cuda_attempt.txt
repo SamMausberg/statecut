@@ -1,0 +1,18 @@
+-- The CXX compiler identification is GNU 14.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+CMake Error at /usr/share/cmake-3.31/Modules/Internal/CMakeCUDAFindToolkit.cmake:104 (message):
+  Failed to find nvcc.
+
+  Compiler requires the CUDA toolkit.  Please set the CUDAToolkit_ROOT
+  variable.
+Call Stack (most recent call first):
+  /usr/share/cmake-3.31/Modules/CMakeDetermineCUDACompiler.cmake:85 (cmake_cuda_find_toolkit)
+  CMakeLists.txt:9 (enable_language)
+
+
+-- Configuring incomplete, errors occurred!
+exit_code=1

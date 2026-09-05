@@ -1,0 +1,2 @@
+CUDA unavailable. No GPU timing or certificate claimed.
+exit_code=1

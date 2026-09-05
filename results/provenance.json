@@ -1,0 +1,8 @@
+{
+  "input_archive": "statecut-v0.1.0(1).zip",
+  "input_archive_sha256": "2cf11083b8f0c8a2db90d855599ea26fbf8e171158fdd954455458b5c2eb579d",
+  "original_archive_git_commit": "6045a9f8e91adec171c9475085582ff19de25f2c",
+  "local_base_tag": "v0.1.0",
+  "release": "v0.2.0",
+  "original_license_preserved": true
+}
