@@ -1,0 +1,23 @@
+\begin{tikzpicture}[x=1cm,y=1cm]
+\path[use as bounding box] (-.25,-.5) rectangle (7.5,4.05);
+\node[scText,anchor=west,font=\sffamily\bfseries\small] at (0,3.9)
+  {(b) Check every persistent write};
+\node[scExact,minimum width=18mm,minimum height=10mm] (old) at (1.1,3.05)
+  {Original state\\$(C,x)$};
+\node[scSummary,text width=27mm,minimum height=10mm] (attempt) at (4.1,3.05)
+  {Interval attempt\\uncertain transients};
+\node[scSummary,draw=scOrange!85!black,fill=scOrange!12,
+  text width=29mm,minimum height=8mm] (gate) at (4.1,1.55)
+  {All writes singleton?\\Greedy token proved?};
+\node[scSplit,minimum width=20mm,minimum height=10mm] (dense) at (1.1,.1)
+  {Reference $F_R$\\from original state};
+\node[scExact,minimum width=21mm,minimum height=10mm] (commit) at (6.2,.1)
+  {Publish exact\\$(y,C')$};
+\draw[scArrow] (old) -- (attempt);
+\draw[scArrow] (attempt) -- node[right,scSmall] {stage all KV privately} (gate);
+\draw[scArrow,dashed] (old.south) -- (dense.north);
+\draw[scArrow] (gate.west) -| node[pos=.3,above,scSmall] {reject} (dense.north);
+\draw[scArrow,draw=scGreen!80!black] (gate.east) -|
+  node[pos=.3,above,xshift=2mm,scSmall,text=scGreen!70!black] {accept} (commit.north);
+\draw[scArrow] (dense.east) -- node[above,scSmall] {exact fallback} (commit.west);
+\end{tikzpicture}

@@ -1,0 +1,21 @@
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric,fit,backgrounds}
+\pgfplotsset{compat=1.18}
+% Okabe--Ito colors; labels and line styles also encode meaning.
+\definecolor{scBlue}{HTML}{0072B2}
+\definecolor{scOrange}{HTML}{E69F00}
+\definecolor{scGreen}{HTML}{009E73}
+\definecolor{scInk}{HTML}{263238}
+\definecolor{scGray}{HTML}{6B747A}
+\tikzset{
+  scArrow/.style={-{Latex[length=1.5mm]},line width=0.65pt,draw=scGray},
+  scSummary/.style={draw=scBlue,fill=scBlue!9,rounded corners=1.5pt,
+    line width=0.85pt,font=\sffamily\fontsize{8}{9}\selectfont,
+    inner sep=4pt,minimum width=11mm,text=scInk,align=center},
+  scExact/.style={scSummary,draw=scGreen,fill=scGreen!12},
+  scSplit/.style={scSummary,draw=scGray!60,fill=white,text=scGray,
+    dashed,line width=0.55pt},
+  scText/.style={font=\sffamily\fontsize{8}{9.5}\selectfont,text=scInk},
+  scSmall/.style={font=\sffamily\fontsize{7}{8}\selectfont,text=scGray}
+}

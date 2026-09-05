@@ -1,0 +1,54 @@
+{
+  "generator": "paper/render_results.py",
+  "inputs": [
+    {
+      "path": "results/gh200/algorithm/v2_experiments.json",
+      "sha256": "18d99bf4746b90e2a5c2a4c479ccdf2ce66ca730e634fe6e67abd4cbbb1fdfd5"
+    },
+    {
+      "path": "results/gh200/device_arithmetic.json",
+      "sha256": "92b7a7ed6a799b31395aa1166ec53455a349573422f2243aa77692cdbc8265bb"
+    },
+    {
+      "path": "results/gh200/microbenchmark_h8_n32768_d64.json",
+      "sha256": "a3f0cc36d0539990ced16c2c9f36f1d5c73d161afa0b136e42ace456609ea058"
+    },
+    {
+      "path": "results/gh200/pretrained_qwen2.5-0.5b.json",
+      "sha256": "4f97915cc7d522e468ab7d1faf9d9ff7171ede46f7dfb8b96a04a2636b81fa18"
+    },
+    {
+      "path": "results/gh200/pretrained_smollm2-135m.json",
+      "sha256": "e0880349a6644de9b2449ab1ac9ea97df02c252513dfef9889d56c4f2b2ddea3"
+    },
+    {
+      "path": "results/gh200/integer_moment.json",
+      "sha256": "337199ad32f13e4024b26b2c0a7ded6d7bdebbc16c87e85f75a7719767bbceca"
+    },
+    {
+      "path": "results/gh200/formal/summary.json",
+      "sha256": "847169be5fb33b0dcd2b1bd4df4a8ec4a55aee48058b977e9bc7da8f40f51f4d"
+    },
+    {
+      "path": "results/gh200/capture_cuda_audit.json",
+      "sha256": "af0a75dce1f0254684d7559d272fc76f98bd7688fb1fc629e98f640991d071f3"
+    },
+    {
+      "path": "results/gh200/capture_cuda_audit_half_quantum.json",
+      "sha256": "05b3ae37d0f1dcfdbaf88a5575d469897a61659a653883d61a0833925608e270"
+    },
+    {
+      "path": "results/gh200/e24/summary.json",
+      "sha256": "ecfdecf95be82e513a8dad2a7d41dcc589f856f7a5ac463d907709ef76792dc5"
+    },
+    {
+      "path": "results/gh200/algorithm/qwen_code_128_layer0_score_domain.json",
+      "sha256": "b2f9f384df8dd8b8d1d2efa00fb59279c8a877a99ca6ad29e06ed1d4ef185cb5"
+    },
+    {
+      "path": "results/gh200/algorithm/extended_e24_tests.json",
+      "sha256": "6d91219bc6be02eafd51a3c1efbe9db57c4c1628762e20305b42740a05209eb6"
+    }
+  ],
+  "scope": "JSON-to-LaTeX rendering only; measurements require their original experiment checks"
+}

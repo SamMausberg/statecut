@@ -1,0 +1,33 @@
+\begin{tikzpicture}[x=1cm,y=1cm]
+\path[use as bounding box] (-.25,-.5) rectangle (7.5,4.05);
+\node[scText,anchor=west,font=\sffamily\bfseries\small] at (0,3.9)
+  {(a) Refine a disjoint cover};
+\node[scSplit] (r0) at (2.3,3.15) {$[0,8)$};
+\node[scSummary] (r1) at (6.15,3.15) {$[8,12)$};
+\node[scSplit] (c0) at (1.0,2.2) {$[0,4)$};
+\node[scSummary] (c1) at (3.6,2.2) {$[4,8)$};
+\node[scExact] (l0) at (0.4,1.23) {$[0,2)$\\[-1pt]{\scriptsize exact}};
+\node[scSummary] (l1) at (1.7,1.23) {$[2,4)$};
+\node[scSplit] (l2) at (3.0,1.23) {$[4,6)$};
+\node[scSplit] (l3) at (4.3,1.23) {$[6,8)$};
+\node[scSplit] (l4) at (5.6,1.23) {$[8,10)$};
+\node[scSplit] (l5) at (6.9,1.23) {$[10,12)$};
+\foreach \from/\to in {r0/c0,r0/c1,c0/l0,c0/l1}
+  \draw[scArrow] (\from) -- (\to);
+\foreach \from/\to in {c1/l2,c1/l3,r1/l4,r1/l5}
+  \draw[scArrow,densely dotted,draw=scGray!55] (\from) -- (\to);
+\node[scSmall,anchor=west] at (0,0.67) {Stored raw rows};
+\foreach \x in {0,...,11}{
+  \pgfmathsetmacro{\left}{0.005+0.612*\x}
+  \ifnum\x<2
+    \draw[draw=scGreen,fill=scGreen!16,line width=.6pt]
+       (\left,0.13) rectangle ++(.575,.36);
+  \else
+    \draw[draw=scGray!45,fill=scGray!5,line width=.4pt]
+       (\left,0.13) rectangle ++(.575,.36);
+  \fi
+  \node[scSmall,text=scInk] at (\left+.2875,.31) {\x};
+}
+\node[scSmall,anchor=west,text=scGreen!70!black] at (0,-.13) {Exact: raw rows opened};
+\node[scSmall,anchor=east,text=scBlue] at (7.35,-.13) {Summary: raw rows unopened};
+\end{tikzpicture}

@@ -1,0 +1,704 @@
+\documentclass{article}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{needspace}
+\usepackage[hyperfootnotes=false]{hyperref}
+\usepackage{xurl}
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+\usepackage[preprint]{icml2026}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{algorithm,algorithmic}
+\input{figures/preamble.tex}
+\usepackage[capitalize,noabbrev]{cleveref}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\N}{\mathbb N}
+\newcommand{\BF}{\operatorname{BF16}}
+\newcommand{\RNE}{\operatorname{RNE}}
+\newcommand{\E}{E_{24}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\raw}{\operatorname{raw}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\profile}{\texttt{RATIONAL\_BF16\_V1}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\input{generated/macros.tex}
+\icmltitlerunning{StateCut: Residual Attention Predicates and Exact Persistent Writes}
+\icmlkeywords{attention, exact computation, interval arithmetic, formal verification, decoding}
+\date{September 5, 2026}
+\pdfstringdefDisableCommands{\def\\{ }}
+\hypersetup{pdfsubject={Private research draft in ICML 2026 preprint format}}
+% Contact is a name only; no private or invented email is embedded.
+\makeatletter
+\def\icmlcorrespondingauthor@text{Samuel Mausberg}
+\makeatother
+
+\begin{document}
+\twocolumn[
+\icmltitle{StateCut: Residual Attention Predicates\\and Exact Persistent Writes}
+\begin{icmlauthorlist}
+\icmlauthor{Samuel Mausberg}{statecut}
+\end{icmlauthorlist}
+\icmlaffiliation{statecut}{StateCut Project}
+\vskip 0.3in
+]
+\printAffiliationsAndNotice{Research draft, not a conference submission.}
+
+\begin{abstract}
+Can a deterministic decoder certify its next transition without rereading
+every historical key and value? We study sufficient conditions for preserving
+both the emitted token and every persistent write under an explicit numerical
+reference. The verifier evaluates signed attention residuals at rounding-cell
+boundaries, using mergeable count, sum, and range summaries; a sharp refinement
+retains the integer number of rows in the classical convex moment bound.
+A persistent forest supports adaptive refinement, while a transactional
+interval interpreter can certify persistent writes even when transient
+activations remain uncertain. We prove the residual, rounding, partition, and
+future-trace implications, and give a nonconstant family with zero raw-row
+reads after preprocessing. The finite-count refinement certifies a case that
+the chord rejects. On two pretrained checkpoints, sampled filtered heads match
+dense E24 through fallback, while no captured attention call is certified in
+full. Measured E24/backend differences and explicit formal-proof boundaries
+leave deployed backend equivalence and end-to-end acceleration open.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+
+During autoregressive decoding, historical key/value (KV) data are repeatedly
+read to compute attention. Query-dependent sparse methods reduce those reads
+by selecting a subset of the cache, with empirical quality evaluations
+\citep{tang2024quest,ribar2024sparq}. We investigate a stricter contract:
+skip historical reads only when a verifier establishes the exact reference
+transition. Matching the current greedy token is insufficient because a small
+change to a new KV entry can affect later tokens. Consequently, the certificate
+must cover the persistent state as well as the immediate decision.
+
+StateCut combines three ideas. First, it tests the residual $N-tD$ directly at
+an output rounding boundary $t$, preserving dependence between an attention
+numerator $N$ and denominator $D$. Second, an append-only forest makes root
+summaries available without a compulsory scan of every fixed-size block.
+Third, it accepts a speculative computation when every live persistent write
+and the terminal greedy decision are exact. A failed attempt executes the
+reference from the original state.
+
+The mathematical ingredients have substantial antecedents. Adaptive exact
+predicates are classical \citep{shewchuk1997}; the first-moment chord bound is
+the Edmundson--Madansky inequality \citep{edmundson1957,madansky1959}; and
+neural-network interval propagation is an established verification method
+\citep{singh2019deeppoly}. We specialize and compose these ingredients for
+attention and persistent decoder state. We also derive and implement an exact
+finite-cardinality version of the moment envelope. This improves the previous
+continuous-mass relaxation without adding summary fields. We make no priority
+claim for the underlying convex extremal argument.
+
+The executable target is a rational arithmetic profile with correctly rounded
+BF16 materializations. This choice makes algebraic reassociation legitimate
+and gives a small reference implementation against which to test certificates.
+It does not identify that profile with PyTorch, FlashAttention, or a pretrained
+checkpoint's instruction-level behavior. Our contribution is a sufficient
+certificate and a falsifiable research artifact, with the remaining numerical
+and systems obligations stated explicitly.
+
+\section{Contract and Numerical Reference}
+\label{sec:contract}
+
+\begin{figure*}[t]
+\centering
+\begin{minipage}[t]{0.49\textwidth}\centering\vspace{0pt}
+\input{figures/frontier.tex}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\textwidth}\centering\vspace{0pt}
+\input{figures/transaction.tex}
+\end{minipage}
+\caption{StateCut's two boundaries. Left: a query refines only part of a
+persistent forest. Solid nodes form the current disjoint frontier; opening
+$[0,2)$ reads two raw rows, while the other solid nodes retain summary
+enclosures. Dashed nodes are outside the current frontier. Right: uncertain
+transients remain private until every persistent write and the terminal
+decision are proved exact. Rejection invokes the reference on the original
+state. Colors are redundant with node labels and line styles.}
+\label{fig:architecture}
+\end{figure*}
+
+Fix model parameters, operator semantics, legal inputs, visibility rules, and
+the tie rule. Let
+\begin{equation}
+ F_R(C,x)=(y,C')
+ \label{eq:transition}
+\end{equation}
+process a pending token $x$, return the predicted token $y$, and produce the
+state $C'$. The state contains every object that can influence a future
+invocation. In the prototype it includes the model identity, per-layer exact
+KV, token prefix, and position. A serving implementation additionally needs
+the relevant masks, position conventions, branch identity, slot ownership,
+generations, synchronization, and any recurrent or mutable state. These
+fields are part of the contract when they are live; a KV-only theorem cannot
+justify omitting them.
+
+\paragraph{Why token equality is weaker.}
+Consider $F(s)=(\mathbf 1[s<0],s-1/2)$. States $s=1/4$ and $s=3/4$ return
+the same first token. Their successors have different signs, so the next
+tokens differ. In contrast, equality of \emph{both} outputs of
+\cref{eq:transition} composes by induction. Sampling would require its own
+coupling argument and an inventory of random state; the present policy is
+greedy with the smallest vocabulary index winning a tie.
+
+\paragraph{Arithmetic profile.}
+For rational scores, define
+\begin{equation}
+ \begin{gathered}
+ \E(z)=2^{-24}\RNE_{\mathbb Z}(2^{24}e^z),\\
+ w_i=\E(q^\top k_i),\qquad
+ A_j=\frac{\sum_i w_i v_{ij}}{\sum_i w_i}.
+ \end{gathered}
+ \label{eq:profile}
+\end{equation}
+The query includes the exact attention scale. Dot products and reductions
+are rational; the materialization is $\BF(A_j)$ with nearest-even rounding.
+The profile canonicalizes signed zero and rejects nonfinite results. The
+exponential oracle refines rigorous Taylor enclosures until integer rounding
+is decided, with explicit resource limits and rejection on exhaustion.
+Weights can round to zero, so denominator positivity is a separate
+obligation. Matrix products sum exactly before each prescribed rounding cut.
+RMS normalization uses $\epsilon=1/256$, and the gate is the specified
+$\BF(x/(1+\E(-x)))$. The full graph is defined by
+\code{src/statecut/model.py} and \code{docs/REFERENCE.md}.
+
+We call this profile \profile{}. It is a deliberately explicit numerical
+object, not a claim of bitwise agreement with a common backend. In
+particular, $\E$ is not invariant under a common score shift: quantizing
+exponentials changes their ratios. PyTorch documents that algebraically
+equivalent reductions can produce different floating-point results
+\citep{pytorchaccuracy}. A mathematical softmax proof therefore needs a
+separate bridge before it can replace a pinned GPU instruction graph.
+
+\section{Residual Certificates from Mergeable Moments}
+\label{sec:residual}
+
+A summary of $n>0$ rows stores coordinatewise key minima and maxima and,
+for each value coordinate,
+\begin{equation}
+ S=\sum_{i=1}^n v_i,\qquad \ell\le v_i\le u.
+ \label{eq:summary}
+\end{equation}
+The builder uses actual extrema; the theorem only requires valid bounds.
+Counts and sums add under merging, and extrema take minima and maxima.
+The reference also retains positive and negative moments for an independent
+interval intersection. No query-time raw scan is needed to merge summaries.
+Summaries must belong to the actual visible rows and the correct layer/head.
+Trusted construction is a premise, not a consequence of shape validation.
+
+Interval dot products give $q^\top k_i\in[L,U]$ throughout a node. Since
+$\E$ is monotone, $a=\E(L)\le w_i\le\E(U)=b$.
+The same reasoning allows interval queries containing their reference
+values. Unsupported masks, biases, or visibility rules require additional
+sound score bounds; they are not implicitly covered.
+
+For one value coordinate and threshold $t$, write
+\begin{equation}
+ \begin{gathered}
+ D=\sum_iw_i,\qquad N=\sum_iw_iv_i,\\
+ R(t)=N-tD=\sum_iw_i(v_i-t),
+ \end{gathered}
+ \label{eq:residual}
+\end{equation}
+and set $m=(a+b)/2$, $h=(b-a)/2$.
+
+\Needspace{5\baselineskip}
+\begin{lemma}[Residual from an absolute-sum envelope]
+\label{lem:generic}
+If $a\le w_i\le b$ and $\sum_i|v_i-t|\le C(t)$, then
+\begin{equation}
+ m(S-nt)-hC(t)\le R(t)\le m(S-nt)+hC(t).
+ \label{eq:bound}
+\end{equation}
+\end{lemma}
+\begin{proof}
+Subtract $m(S-nt)$ from \cref{eq:residual}. The result is
+$\sum_i(w_i-m)(v_i-t)$, whose absolute value is at most
+$h\sum_i|v_i-t|$ by $|w_i-m|\le h$ and the triangle inequality.
+\end{proof}
+
+\subsection{The Classical Chord Envelope}
+
+Convexity of $v\mapsto|v-t|$ gives, for $\ell<u$,
+\begin{equation}
+ C_{\rm ch}(t)=
+ \frac{(nu-S)|\ell-t|+(S-n\ell)|u-t|}{u-\ell}.
+ \label{eq:chord}
+\end{equation}
+For $\ell=u$, put $C_{\rm ch}(t)=n|\ell-t|$. Then
+$\sum_i|v_i-t|\le C_{\rm ch}(t)$. This is the univariate
+Edmundson--Madansky first-moment bound applied to the empirical distribution
+\citep{edmundson1957,madansky1959}; \cref{app:chord} gives the proof.
+It is sharp when arbitrary real mass is allowed at the two endpoints,
+although those masses need not correspond to integer row counts.
+
+Both $S-nt$ and \cref{eq:chord} are unchanged by
+$(v_i,t)\mapsto(v_i+c,t+c)$. Thus a large common value offset does not
+itself enlarge the residual uncertainty. An independent quotient enclosure
+usually loses that cancellation.
+
+\subsection{A Sharp Envelope for an Integer Number of Rows}
+\label{sec:integer}
+
+The continuous-mass relaxation discards information already present in the
+integer count $n$. Retaining it gives a stronger bound at constant summary
+cost. For $d=u-\ell>0$, define
+\begin{equation}
+ r=\frac{S-n\ell}{d},\qquad k=\floor{r},\qquad
+ x_* =\ell+(r-k)d.
+ \label{eq:integerparams}
+\end{equation}
+Here $0\le r\le n$. If $k<n$, put
+\begin{equation}
+ C_{\rm int}(t)=k|u-t|+(n-k-1)|\ell-t|+|x_*-t|.
+ \label{eq:integer}
+\end{equation}
+If $k=n$, use $C_{\rm int}(t)=n|u-t|$; the case $d=0$ uses
+$n|\ell-t|$.
+
+\begin{theorem}[Sharp finite-cardinality envelope]
+\label{thm:integer}
+For integer $n\ge1$ and feasible $(S,\ell,u)$,
+\begin{equation}
+ \max_{\substack{v\in[\ell,u]^n\\\sum_i v_i=S}}
+       \sum_i|v_i-t|=C_{\rm int}(t)\le C_{\rm ch}(t).
+ \label{eq:sharp}
+\end{equation}
+Consequently, \cref{eq:bound} with $C_{\rm int}$ gives the exact minimum
+and maximum of $R(t)$ over this value set and all independent choices
+$w_i\in[a,b]$.
+\end{theorem}
+\begin{proof}
+If two coordinates are interior, preserve their sum and vary them in
+opposite directions. Their contribution to the objective is convex in that
+variation. One endpoint of its feasible interval has at least the original
+objective value and puts at least one coordinate at $\ell$ or $u$.
+Repeating leaves at most one interior coordinate. The fixed sum forces the
+endpoint counts and remaining value in \cref{eq:integerparams,eq:integer}.
+This construction attains $C_{\rm int}$, and the chord bound applied to it
+proves the inequality. Choosing
+$w_i=m\pm h\sgn(v_i-t)$ attains the two residual endpoints.
+\cref{app:integer} details boundary cases and termination.
+\end{proof}
+
+The sharpness is for the stated boxed relaxation. It does not retain
+key/value correlations, individual score constraints, discrete BF16 value
+feasibility, or discrete $\E$ weight feasibility. Those restrictions can
+make the true attention range smaller. For rational summary inputs, the
+extremal value vector is rational, so no irrational values are needed.
+
+The refinement is translation invariant and never weaker than the chord
+bound. Its additive benefit is bounded:
+\begin{equation}
+ 0\le C_{\rm ch}(t)-C_{\rm int}(t)\le (u-\ell)/2.
+ \label{eq:improvement}
+\end{equation}
+Thus the improvement per residual endpoint is at most $h(u-\ell)/2$;
+there is no implied factor improvement as $n$ grows. For $n=3$, $S=48$,
+$\ell=63/4$, and $u=65/4$, the difference is strict at most interior
+thresholds (\cref{fig:envelope}).
+
+\begin{figure}[t]
+\centering
+\input{figures/envelope.tex}
+\caption{Exact analytic envelopes for three rows with sum $48$ and range
+$[63/4,65/4]$. The integer count forces the extremal vector
+$(63/4,16,65/4)$; a continuous-mass relaxation permits $1.5$ rows at each
+endpoint. The vertical marks are the two BF16 boundaries of $16$.
+This plot is a theorem illustration, not measured model data.}
+\label{fig:envelope}
+\end{figure}
+
+\subsection{Safe Intersections}
+
+Let $P=\sum_i\max(v_i,0)$ and $M=\sum_i\min(v_i,0)$. Then
+$N\in[aP+bM,bP+aM]$ and $D\in[na,nb]$. Interval subtraction
+of $tD$ gives another residual enclosure. Intersecting it with
+\cref{eq:bound} is sound. A disjoint intersection signals a violated
+arithmetic or provenance premise and must reject. The direct threshold
+predicate itself requires no division by an uncertain denominator; computing
+the moment parameters still uses scalar divisions by known summary values.
+
+\section{From Residual Signs to Exact Decisions}
+\label{sec:gates}
+
+For a proposed finite output $y$, let $J_y$ be its exact rounding cell, with
+boundaries $t_-$ and $t_+$ and separately specified endpoint inclusion.
+Ordinary BF16 nearest-even cells include both midpoints for even
+significands and exclude both for odd significands. The canonical zero cell
+is $[-2^{-134},2^{-134}]$; maximal finite values have an open overflow
+boundary. Neighbor spacing can be asymmetric at powers of two.
+
+\begin{theorem}[Residual rounding gate]
+\label{thm:gate}
+Suppose $D>0$. Let $\underline R(t_-)$ and $\overline R(t_+)$ be sound
+lower and upper residual bounds. If
+\begin{equation}
+ \underline R(t_-)\ge0,\qquad \overline R(t_+)\le0,
+ \label{eq:gate}
+\end{equation}
+with a strict comparison at each excluded endpoint, then $\BF(N/D)=y$.
+\end{theorem}
+\begin{proof}
+The identity $R(t)=D(N/D-t)$ and $D>0$ convert each residual sign to
+the corresponding cell-membership inequality. Membership in $J_y$ is
+precisely the definition of rounding to $y$.
+\end{proof}
+
+For a disjoint frontier of nodes, sum residual bounds at the \emph{same}
+threshold. An opened leaf contributes its exact $N-tD$. The proposal is
+untrusted: a bad candidate may cause rejection, but cannot create a false
+certificate under the stated premises. The reference proposer uses midpoint
+weights and summary means; its work is charged to the filter.
+
+A centered quotient $t+R(t)/D$ is sound when denominator division is valid,
+and is useful for propagating transient intervals. It can nevertheless
+remain too wide: its independently combined extrema need not be jointly
+attainable. The sign checks in \cref{eq:gate} retain the dependence needed
+for rounding without constructing that quotient.
+
+\begin{proposition}[Nonconstant family with no raw reads]
+\label{prop:family}
+Let $n>0$ be even, with half the values $63/4$ and half $65/4$. For any
+weights in $[7/8,9/8]$, $\BF(N/D)=16$, and the chord residual gate proves
+this from one summary.
+\end{proposition}
+\begin{proof}
+Here $S=16n$, $m=1$, and $h=1/8$. The cell of $16$ is the closed,
+asymmetric interval $[511/32,257/16]$. Both boundaries are inside the
+value range and $C_{\rm ch}=n/4$ there. The lower-bound residual is
+$n/32-n/32=0$ at the left endpoint; the upper-bound residual is
+$-n/16+n/32=-n/32<0$ at the right. Finally $D\ge7n/8>0$.
+\end{proof}
+
+This is an existence result after preprocessing. The illustrative weight
+box is not the same as the $\E(\pm1/8)$ box in the executable balanced
+fixture. That fixture is separately checked against its actual quantized
+weights. No acceptance rate for pretrained activations follows from either
+construction.
+
+\section{A Persistent Refinement Forest}
+\label{sec:forest}
+
+Raw leaves contain at most $B$ consecutive entries. Every full leaf is
+sealed and merged with adjacent equal-rank roots, as in a binary counter.
+A partial tail is separate. For $m=\floor{N/B}$ full leaves there are
+$\operatorname{popcount}(m)$ completed roots and at most one tail, hence
+$O(\log(2+N/B))$ initial summaries. Raw entries are retained; the index
+does not establish memory compression.
+\Cref{fig:architecture} illustrates a partially refined frontier.
+
+\begin{algorithm}[t]
+\caption{Exact attention cut from a disjoint frontier}
+\label{alg:attention}
+\begin{algorithmic}[1]
+\REQUIRE Trusted forest, query $q$, expansion budget $K$
+\STATE $\mathcal F\leftarrow$ roots and tail; all pieces unresolved
+\FOR{$s=0,\ldots,K$}
+  \STATE Bound each unresolved piece's weights; propose $y$
+  \STATE Sum denominator and residual bounds over $\mathcal F$
+  \IF{denominator is positive and every coordinate passes
+       \cref{thm:gate}}
+    \STATE \textbf{return} $y$ with an accepted-cut certificate
+  \ENDIF
+  \IF{$s=K$ or no unresolved pieces remain}
+    \STATE \textbf{break}
+  \ENDIF
+  \STATE Choose an unresolved piece using enclosure width
+  \IF{it is internal}
+    \STATE Replace it by its two children
+  \ELSE
+    \STATE Read its raw rows and store its exact contribution
+  \ENDIF
+\ENDFOR
+\STATE Exactify only unresolved pieces; reuse exact contributions
+\STATE \textbf{return} exactly rounded dense attention under \profile{}
+\end{algorithmic}
+\end{algorithm}
+
+\begin{theorem}[Partition and raw-read accounting]
+\label{thm:frontier}
+The frontier in \cref{alg:attention} remains a disjoint cover of the
+visible prefix. Each raw leaf is read at most once, including exploration
+and fallback, under the exact-rational reference.
+\end{theorem}
+\begin{proof}
+Append and adjacent binary carries preserve consecutive disjoint coverage.
+A split replaces $[a,c)$ by $[a,b)$ and $[b,c)$ with the same union.
+Exactification changes only representation. Exact pieces are never opened
+again, and fallback descends only through unresolved pieces; those cannot
+overlap exact ones. Thus no raw leaf is read twice.
+\end{proof}
+
+A root-only attempt requires
+$O((d_k+d_v)\log(2+N/B))$ scalar summary work, and
+$O(d_k+d_v)$ for a single root. This is a logical operation count;
+rational bit complexity, allocation, and interpreter overhead are outside
+that count. The current Python scheduler scans the frontier for priority
+on each expansion. The tree can still be fully explored, followed by all
+raw reads; a budget limits speculative exploration, not fallback work.
+
+Across $m$ completed leaves, fewer than $m$ binary merges occur, so merges
+are amortized constant per completed leaf. Summary updates and initial
+construction must still be charged. Python root tuples and the toy token
+prefix are copied, with the latter costing $O(T)$ per append. A backend
+that fixes a nonassociative reduction tree may require a fresh dense pass
+after failed speculation; \cref{thm:frontier} does not remove that cost.
+
+\section{Certifying the Persistent Write Frontier}
+\label{sec:writes}
+
+Some consumers erase transient uncertainty. Let $W(h)$ denote every new
+persistent write and $G(h)$ the terminal decision. It is sufficient to prove
+$W(\hat h)=W(h_R)$ and $G(\hat h)=G(h_R)$ even when
+$\hat h\ne h_R$. StateCut's \code{writes} strategy realizes this
+observation using a sound interval interpreter, exact rounding, and private
+staging. It requires singleton rounded K/V coordinates before appending to
+a staged forest; queries and attention outputs may remain intervals.
+The \code{cuts} strategy instead certifies exact attention
+materializations and executes the exact suffix, using a decision gate only
+where no later persistent writes depend on uncertain transients.
+
+\begin{lemma}[Greedy decision with ties]
+\label{lem:argmax}
+Suppose $z_j\in[L_j,U_j]$. Candidate $c$ is the smallest-index maximizer if
+\begin{equation}
+ U_j<L_c\ (j<c),\qquad U_j\le L_c\ (j>c).
+ \label{eq:argmax}
+\end{equation}
+\end{lemma}
+\begin{proof}
+For an earlier competitor, $z_j\le U_j<L_c\le z_c$; for a later
+competitor, $z_j\le U_j\le L_c\le z_c$. These are exactly the required
+strict and weak comparisons.
+\end{proof}
+
+\begin{theorem}[Exact transition and future traces]
+\label{thm:state}
+Assume every represented interval contains its reference intermediate,
+every newly persistent scalar has a singleton interval, and the full
+vocabulary satisfies \cref{eq:argmax}. Commit all staged writes together.
+The resulting pair $(y,C')$ equals \cref{eq:transition}. If every rejected
+attempt runs $F_R$ from the original state, the filtered decoder has the
+same tokens and persistent state for every finite legal continuation.
+\end{theorem}
+\begin{proof}
+A reference write contained in $[a,a]$ equals $a$ by antisymmetry.
+Coordinatewise equality covers every new persistent write; unchanged
+committed fields remain equal. \Cref{lem:argmax} proves token equality.
+An accepted step and a rejected step therefore both equal $F_R$. Induct
+over supplied input tokens. For autonomous decoding, use state $(C,x)$
+and feed the common output $y$ as the next pending input.
+\end{proof}
+
+The interpreter uses signed interval affine operations, sound interval
+squaring and square roots, and monotone BF16 rounding. It multiplies an
+interval for $x$ by an interval for $1/(1+\E(-x))$; it does not assume
+the entire SiLU-like function is monotone. Positive RMS epsilon prevents a
+zero normalizer. \Cref{app:interpreter} explains the containment induction
+and its trusted components. Any ambiguous write or decision, invalid
+denominator, or resource failure discards the attempted transition before
+dense fallback. There is no partial commit or future repair debt.
+
+\section{Evaluation and Evidence Scope}
+\label{sec:evaluation}
+
+We test three distinct questions: whether a predicate accepts fewer raw
+reads while preserving the named reference, whether complete toy-decoder
+states remain equal, and whether device or pretrained observations expose
+obstacles to deployment. The first two use exact-rational oracles. Device
+tests and pretrained captures are separately scoped in the generated
+measurement record below. All tabulated logical-read data are read from
+machine-readable experiment artifacts by \code{paper/render\_results.py}.
+
+\subsection{Paired Logical-Read Ablations}
+
+The balanced fixture uses repeated four-way combinations of keys
+$\pm1/8$ and values $16\pm1/4$, query $q=1$, and leaves of $B=32$.
+It compares the original independent numerator/denominator gate, a
+centered-quotient tree gate, and the direct residual tree gate on identical
+rows with zero expansion budget. Every result is checked against dense
+\profile{}. \Cref{tab:reads} reports raw reads and summary reads at
+four lengths. Index construction reads the entire prefix and is excluded
+from query reads, not from total system cost.
+
+\input{generated/attention_table.tex}
+
+The direct gate accepts the balanced cases from one summary. Both divided
+variants require dense fallback. This separates the threshold predicate
+from merely centering a quotient, and the tree from the original flat
+summary scan. A separately seeded unstructured case retains full raw
+fallback; there is no universal sublinear claim.
+
+\paragraph{Finite-cardinality improvement.}
+For $n=3$, $S=48$, $\ell=63/4$, $u=65/4$, and score bounds
+$[-3/20,3/20]$, the integer-count residual gate can pass the cell of $16$
+where the chord residual gate fails. The experiment fixes the same summary,
+proposal, and actual $\E$ weight endpoints for both bounds. Sharpness tests
+enumerate small rational grids and endpoint weights, and include
+translation, degeneracy, and exact-integer input cases.
+\input{generated/integer_result.tex}
+
+\begin{figure}[t]
+\centering
+\input{figures/integer_ablation.tex}
+\caption{Measured raw reads in the finite-count ablation. Each point is one
+deterministic odd-length fixture with fixed score magnitude, zero expansion
+budget, and a single summary. The chord gate reads all rows. Finite-count
+gains disappear at larger counts, consistent with the additive bound in
+\cref{eq:improvement}. Lines connect tested points, not a fitted model.}
+\label{fig:integer-ablation}
+\end{figure}
+\Cref{fig:integer-ablation} retains both the favorable finite-count cases
+and the cases where both methods fall back.
+
+\subsection{Complete-State and Write-Frontier Checks}
+
+Four small random decoders (seeds $0,1,8,19$) each generate 24 transitions
+under both strategies, with expansion budget 3 and leaf size 4. The harness
+compares every returned token and complete state to dense execution.
+\input{generated/state_table.tex}
+These trajectories are deterministic constructed tests, not independent
+samples from an LLM workload. The write-frontier acceptance rate is
+\WriteAccepts{} of \WriteSteps{} steps; broad interval propagation
+often fails. A separate two-layer construction permits a non-singleton
+attention materialization yet certifies all persistent writes and the
+decision without historical raw reads. Its second-layer K/V projections
+are zero, so it establishes logical separation rather than typical model
+behavior.
+
+\subsection{Hardware, Pretrained Captures, and Formal Build}
+\label{sec:measured}
+\input{generated/runtime_evidence.tex}
+\input{generated/cuda_acceptance.tex}
+\input{generated/e24_captures.tex}
+
+Capture-only evaluation preserves the selected backend's returned output
+and records actual query, key, value, and output tensors. Re-evaluating
+those tensors under \profile{} asks whether the profiles happened to
+agree on the observed input. It cannot prove a universal numerical bridge,
+and observing one attention layer cannot establish a complete decoder
+transition. A CUDA gate microbenchmark measures the supplied local
+certificate; its comparison to a separate SDPA primitive does not measure
+an integrated decoder speedup.
+
+\input{generated/formal_evidence.tex}
+The compiled declarations establish real-valued algebra and abstract state
+composition. The complete finite-format interpreter and generated GPU code
+remain outside that proof.
+The trusted base includes Python integers and fractions, interval and
+rounding code, summary construction and attribution, and compiler/device
+semantics for the CUDA experiment. A successful proof build does not verify
+these implementations by itself.
+
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Filtering and moments.}
+\citet{shewchuk1997} established adaptive exact numerical predicates for
+geometric decisions. The general accept/refine/fallback pattern predates
+this work. The chord in \cref{eq:chord} is classical
+\citep{edmundson1957,madansky1959}; finite-vector convex extremality fits
+the majorization framework \citep{marshall2011}. StateCut applies those
+tools to $N-tD$ at representable output boundaries and connects the result
+to persistent writes.
+
+\paragraph{Attention selection and certification.}
+FlashAttention reduces dense attention memory traffic through tiling
+\citep{dao2022flashattention}. Quest already stores key extrema to select
+query-relevant pages \citep{tang2024quest}; SparQ reduces cached-history
+transfers by selective fetching \citep{ribar2024sparq}. Bounds for selecting
+attention blocks also precede this manuscript \citep{butucea2026screening}.
+A bound on a block's best score alone does not certify its omission from
+a normalized output. We additionally certify the output cell using value
+moments and all unresolved mass.
+
+Recent preprints give local quantized-attention error bounds and fallback
+\citep{calver2026}, deterministic and probabilistic runtime witnesses
+\citep{wei2026witcert}, and contracts for heterogeneous memory updates and
+reads \citep{wei2026observability}. These are related contributions with
+their own stated evidence boundaries; we do not claim invention of runtime
+attention certification or state-aware memory reasoning. Our contract
+requires exact newly persistent values under one numerical profile, and
+our main construction certifies read omission through residual signs.
+
+\paragraph{Verification and generation.}
+Abstract interpretation has long supported neural-network certificates
+\citep{singh2019deeppoly}. An existing public research artifact applies
+exact-real interval certification to full-vocabulary next-token decisions
+for pretrained language models \citep{naughton2026}. StateCut's persistent
+write condition is needed to reuse a speculative transition without
+altering future state. Speculative decoding preserves a sampling
+distribution through proposal verification \citep{leviathan2023}; that
+contract differs from deterministic token-and-state equality. Conditional
+lower bounds for general attention \citep{dumankeles2023} are consistent
+with a preprocessed sufficient condition that can fail on every difficult
+query. We establish no worst-case acceleration theorem.
+
+\section{Limitations and Required Backend Bridge}
+\label{sec:limitations}
+
+The remaining systems question is whether certificates are both useful
+and cheaper than the work they avoid. BF16 cells near zero are narrow;
+large key boxes, mixed values, and many coordinates can make full-cut
+acceptance rare. Layerwise interval propagation compounds this difficulty.
+The finite-count improvement has bounded additive gain. Raw KV storage,
+summary maintenance, complete vocabulary checks, and dense fallback remain
+necessary. This artifact does not establish competitive end-to-end
+performance, general pretrained acceptance, or a serving-ready integration.
+
+For a pinned backend output $B$ and mathematical attention $A$, a possible
+bridge proves $|B-A|\le\varepsilon$ for the entire relevant instruction
+graph. Then certify $A$ inside
+$[t_-+\varepsilon,t_+-\varepsilon]$, with the appropriate strict
+edges. \Cref{app:bridge} proves the implication; obtaining
+$\varepsilon$ must account for products, reductions, exponentials,
+normalization, fusion, conversion, and exceptional values. A measured
+maximum error is not a universal premise. NVIDIA explicitly identifies
+certain mathematical-function error tables as non-exhaustive observations
+\citep{nvidiamath}. The local CUDA checker uses directed arithmetic and
+its own exponential enclosure; it does not supply this backend bridge.
+
+For dense cost $T_D$, filter/proposal cost $T_F$, maintenance cost $T_M$,
+accepted suffix cost $T_A$, and full valid acceptance probability $p$, a
+simple serial model gives
+\begin{equation}
+ \mathbb E[T]=T_F+T_M+pT_A+(1-p)T_D.
+ \label{eq:cost}
+\end{equation}
+A speedup requires $T_F+T_M<p(T_D-T_A)$. This is a break-even condition,
+not an estimate of $p$. Initial indexing, transfers, page migration,
+launches, synchronization, retries, and unaffected model work must be
+charged in an integrated benchmark.
+
+\section*{Impact Statement}
+This work studies the reliability of computation-saving inference methods.
+Exactness claims with incomplete numerical or state contracts can conceal
+behavior changes, so the artifact makes those contracts and their remaining
+implementation gaps explicit. Lower inference cost, if ultimately achieved,
+would inherit the benefits and misuse risks of the models being run. The
+present work does not evaluate downstream safety, fairness, or societal
+outcomes and does not make a deployment recommendation.
+
+\bibliography{references}
+\bibliographystyle{icml2026}
+
+\clearpage
+\appendix
+\onecolumn
+\input{appendix.tex}
+\end{document}

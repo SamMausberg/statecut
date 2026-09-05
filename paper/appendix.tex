@@ -1,0 +1,369 @@
+\section{Complete Mathematical Proofs}
+
+All sums below are finite. Real-valued theorem statements include the rational
+reference as a special case. None assumes statistical independence of keys,
+values, or queries. The only independence used for sharpness is freedom to
+choose each weight anywhere in its stated box.
+
+\subsection{Convex Chord Bound and Continuous-Mass Sharpness}
+\label{app:chord}
+
+Suppose $\ell<u$ and $v\in[\ell,u]$. Put
+$\alpha=(u-v)/(u-\ell)$ and $\beta=(v-\ell)/(u-\ell)$.
+Then $\alpha,\beta\ge0$, $\alpha+\beta=1$, and
+$v-t=\alpha(\ell-t)+\beta(u-t)$. The triangle inequality gives
+\begin{equation}
+ |v-t|\le\alpha|\ell-t|+\beta|u-t|.
+\end{equation}
+Summing and substituting $S=\sum_i v_i$ yields \cref{eq:chord}.
+For $\ell=u$, all $v_i=\ell$, so the expression is exact. This proves
+soundness without relying on a probabilistic interpretation of the moment.
+
+For nonnegative real masses with total $n$ and first moment $S$, masses
+$\lambda_\ell=(nu-S)/(u-\ell)$ and
+$\lambda_u=(S-n\ell)/(u-\ell)$ at $\ell,u$ are feasible and attain
+$C_{\rm ch}$. They are integers only for particular summaries. Choosing
+weights $m+h\sgn(v-t)$ or $m-h\sgn(v-t)$ attains the corresponding
+residual extreme for that endpoint distribution. This proves sharpness for
+the continuous-mass relaxation, not generally for $n$ integer rows.
+
+\subsection{Finite-Cardinality Extremality and Its Quantitative Gain}
+\label{app:integer}
+
+We prove \cref{thm:integer} constructively. The cases $\ell=u$, $S=n\ell$,
+and $S=nu$ force a constant vector and agree with the stated formula.
+Assume otherwise that $d=u-\ell>0$. Start with an arbitrary feasible
+vector $v$. If two coordinates $x,y$ lie strictly inside $(\ell,u)$, define
+\begin{equation}
+ I=[\max(\ell-x,y-u),\ \min(u-x,y-\ell)].
+\end{equation}
+This is the feasible interval for replacing $(x,y)$ with
+$(x+\delta,y-\delta)$. Its lower endpoint is strictly negative and its
+upper endpoint strictly positive, so $0$ lies inside $I$. The function
+$f(\delta)=|x+\delta-t|+|y-\delta-t|$ is convex. Writing $0$ as a convex
+combination of the endpoints shows that at least one endpoint
+$\delta_*$ has $f(\delta_*)\ge f(0)$. At that endpoint at least one of
+the two coordinates equals $\ell$ or $u$. No previously fixed endpoint
+coordinate changes, the sum is preserved, and the objective does not
+decrease. Each operation reduces the number of interior coordinates by at
+least one, so at most $n-1$ operations leave at most one interior coordinate.
+
+If the resulting vector has one interior coordinate $x$, let $k$ be the
+number of upper endpoints. Then
+\begin{equation}
+ S=ku+(n-k-1)\ell+x
+   =n\ell+kd+(x-\ell).
+\end{equation}
+Since $0<x-\ell<d$, $k=\floor{(S-n\ell)/d}$ and
+$x=x_*$. If no coordinate is interior, $r=(S-n\ell)/d$ is an integer.
+For $r<n$ the formula with $x_*=\ell$ counts that endpoint once; for
+$r=n$ the separate all-$u$ case applies. In every case the final objective
+is exactly $C_{\rm int}(t)$. Because it is no smaller than the arbitrary
+initial objective, it is an upper bound. The described final vector is
+itself feasible, so the bound is attained. This proves the maximum equality
+in \cref{eq:sharp}. Applying the chord inequality to the final vector
+proves $C_{\rm int}\le C_{\rm ch}$.
+
+For residual sharpness, \cref{lem:generic} supplies the bound. On a
+maximizing value vector choose $w_i=m+h\sgn(v_i-t)$ to obtain
+\begin{equation}
+ \sum_iw_i(v_i-t)=m(S-nt)+h\sum_i|v_i-t|.
+\end{equation}
+These weights lie in $[a,b]$; at $v_i=t$ any allowed weight suffices.
+Changing the sign before $h$ attains the lower endpoint. The denominator
+may vanish if the box includes zero, but the residual extremality theorem
+does not divide by it. Positivity is separately required for rounding.
+
+To prove \cref{eq:improvement}, observe that the chord is exact at all
+endpoint coordinates of the extremal vector. Its excess therefore comes
+only from $x_*$. If $t\notin(\ell,u)$, absolute value is affine on
+$[\ell,u]$ and the excess is zero. Otherwise let $g(x)$ be the chord
+through $(\ell,|\ell-t|)$ and $(u,|u-t|)$. For $x\le t$,
+\begin{equation}
+ g(x)-|x-t|=\frac{2(x-\ell)(u-t)}{d},
+\end{equation}
+and for $x\ge t$ it equals $2(u-x)(t-\ell)/d$. The maximum occurs
+at $x=t$ and is $2(t-\ell)(u-t)/d\le d/2$, because
+$(t-\ell)(u-t)\le d^2/4$. Thus a single remainder coordinate accounts
+for all the improvement and establishes its additive upper bound.
+
+\subsection{Translation Invariance}
+
+Replace $v_i,\ell,u,t,S$ by
+$v_i+c,\ell+c,u+c,t+c,S+nc$. Then $u-\ell$, $S-n\ell$,
+$nu-S$, and $S-nt$ are unchanged. The translated $r$ and $k$ are
+unchanged, and $x_*$ becomes $x_*+c$. Every absolute difference in both
+envelopes is unchanged. The exact residual is unchanged term by term.
+Therefore both the chord and finite-cardinality residual enclosures are
+translation invariant. This statement keeps weights fixed; it does not
+claim invariance under score shifts in \cref{eq:profile}.
+
+\subsection{Denominator Positivity, Cell Edges, and Proposal Soundness}
+
+For each disjoint node $b$, a nonnegative weight box gives
+$D_b\in[n_ba_b,n_bb_b]$. Summing the lower endpoints and obtaining a
+strictly positive result establishes $D>0$. An exact opened leaf may
+instead contribute a known positive denominator. A zero lower bound is
+inconclusive even when the actual denominator is positive; a verifier may
+refine, but cannot skip this premise.
+
+For an arbitrary interval cell $J_y$ with independently open or closed
+edges, the lower test is $\underline R(t_-)\ge0$ if the edge is
+included and $\underline R(t_-)>0$ otherwise. The upper test similarly
+uses $\overline R(t_+)\le0$ or $<0$. The identity
+$R(t)=D(A-t)$ converts these to the exact membership conditions when
+$D>0$. Every possible $A$ belongs to the same cell, so rounding is
+decided independently of how the proposal was obtained.
+
+BF16 has subnormal spacing $2^{-133}$, making the canonical zero cell
+$[-2^{-134},2^{-134}]$. A normal power of two has unequal spacing to its
+predecessor and successor, so replacing its true cell with a symmetric ULP
+window can be unsound. At $16$, the predecessor is $255/16$ and the
+successor is $129/8$; their midpoints with $16$ are $511/32$ and
+$257/16$. The largest finite positive magnitude has odd significand and
+an open overflow midpoint under this finite-only profile. Negative cells
+are reflected from positive cells. The executable test enumerates all
+finite canonical BF16 centers and checks these cell memberships directly
+against exact rounding.
+
+\subsection{Sound Summaries and Interval Queries}
+
+Let a query coordinate satisfy $q_j\in[\underline q_j,\overline q_j]$
+and a stored key coordinate satisfy
+$k_{ij}\in[\underline k_j,\overline k_j]$ for every row. The product
+belongs to the interval with endpoints the minimum and maximum of the four
+endpoint products. Summing these intervals gives an enclosure $[L,U]$
+of every dot product. Exact scaling and any sound bias enclosure may be
+incorporated before applying the nondecreasing $\E$. Integer nearest-even
+rounding is nondecreasing, as is $e^z$, hence $\E(L)\le\E(q^\top
+k_i)\le\E(U)$. If a loose summary score interval exceeds the oracle
+resource domain, the filter may open nodes or fall back to legal raw scores;
+it must not infer that the reference invocation itself is invalid merely
+from the loose box.
+
+Summary merging follows directly from finite-sum associativity and extrema
+over disjoint unions. For the positive/negative intersection, each positive
+$v_i$ contributes in $[av_i,bv_i]$ and each negative $v_i$ in
+$[bv_i,av_i]$. Summing yields $[aP+bM,bP+aM]$. The denominator interval,
+signed interval scaling by $t$, and subtraction are sound operations.
+Intersecting two sets containing the same residual preserves containment.
+A disjoint result contradicts the premise that both sets contain it.
+
+\section{Forest Invariants and Complexity Details}
+
+Suppose the current completed roots cover consecutive disjoint ranges and
+have strictly descending ranks. Appending a new full leaf creates a rank-zero
+root at the right end. Merging the last two roots when they have the same
+rank preserves their union, contiguity, and all summaries. Repeating the
+carry produces exactly the set bits of the completed-leaf count. Induction
+from the empty prefix proves root coverage. The partial tail, if nonempty,
+starts at the end of the completed prefix and ends at $N$, completing the
+partition.
+
+If there are $m$ completed leaves and $p=\operatorname{popcount}(m)$
+roots, exactly $m-p$ merges have occurred: each completion increases the
+number of roots by one and each merge decreases it by one. In particular,
+$m-p<m$ for $m>0$. One completion can still trigger
+$\floor{\log_2m}+1$ carries. The summaries contain $O(d_k+d_v)$
+scalars, and a full binary tree with $m$ leaves contains fewer than $2m$
+nodes. With the partial tail, metadata storage is
+$O((1+N/B)(d_k+d_v))$ scalar slots, in addition to
+$O(N(d_k+d_v))$ raw data. These counts suppress integer/rational bit size.
+
+For a query, replacing a node by disjoint children preserves both coverage
+and sum of exact contributions. Each piece is marked unresolved or exact;
+only unresolved pieces can be selected for refinement. Because descendants
+of disjoint pieces are disjoint, fallback through unresolved subtrees never
+revisits an exactified raw leaf. This is the operational condition underlying
+\cref{thm:frontier}, not merely a property of the tree shape.
+
+\section{Interval Interpreter and Transactional Composition}
+\label{app:interpreter}
+
+The interpreter claim is conditional on a specified computation graph and
+sound primitive implementations. For any acyclic reference graph, prove
+containment in topological order. Point inputs are enclosed exactly. An
+interval affine map uses signed endpoint products and interval addition;
+these contain the corresponding exact products and sums. Interval squaring
+uses zero as its lower endpoint exactly when zero lies in the input interval.
+For a nonnegative radicand interval, monotonicity of the square root allows
+outward enclosures of its two endpoints. Reciprocal reverses endpoints on
+a strictly positive interval. These facts preserve RMS normalization
+containment after adding $\epsilon>0$.
+
+The profile's exact point RMS calculation decides BF16 rounding by rational
+square comparisons for $x/\sqrt r$; it need not approximate the irrational
+number first. For non-point arguments, a square-root interval and outward
+division suffice. The sigmoid factor $1/(1+\E(-x))$ is monotone, but
+$x/(1+\E(-x))$ need not be. Multiplying enclosures of the two factors
+therefore supplies the safe rule. Whenever a represented result is
+materialized, monotonicity of the finite BF16 rounding map sends a real
+interval to an interval of possible rounded values. If this interval is a
+singleton, it equals the reference materialization. Overflow or an
+unresolved numerical guard ends speculation.
+
+Attention bounds contain all reference query/key/value combinations
+represented by the current intervals. Their division requires a positive
+denominator enclosure. Residual gates may replace a rounded attention
+interval by an exact value using \cref{thm:gate}. Otherwise uncertainty may
+propagate through further sound operations, until each live write is known
+exactly or the attempt is rejected. This topological induction supplies the
+interval-containment premise of \cref{thm:state}; it is not a formal
+refinement proof of the Python interpreter.
+
+Before execution, the caller retains the immutable original state.
+Every proposed write is staged privately; a reference-equal scalar is
+appended only to the staged representation. No reader may observe staging
+before the final decision is certified. On rejection the staged object is
+discarded, and dense evaluation starts from the original state, not from a
+partially modified cache. On acceptance all persistent updates are
+published as one logical transaction. Correct model/sequence attribution
+and a complete state inventory are premises of this publication step.
+
+For future-trace composition, let $\widehat F(C,x)$ be the filtered
+transition. The numerical and write gates establish
+$\widehat F(C,x)=F_R(C,x)$ on accepted invocations, and fallback establishes
+the same equation on rejected invocations. For a supplied sequence
+$x_0,\ldots,x_{T-1}$, the base states agree. If states at step $j$ agree,
+the common input and the one-step equation give equal tokens and next
+states. Induction proves all $T$ tokens and final states equal. For greedy
+generation replace the system state by $(C,x)$ and use
+$(C,x)\mapsto(y,(C',y))$; equal emitted tokens provide equal next inputs.
+The statement concerns every finite legal continuation and contains no
+accumulated numerical error or failure probability.
+
+\section{Outward Exponential Enclosures and E24 Rounding}
+\label{app:lattice}
+
+Let $\Delta=2^{-24}$ and define
+$Q_\Delta(x)=\Delta\RNE_{\mathbb Z}(x/\Delta)$ on nonnegative real
+inputs. Suppose a sound exponential computation gives
+$0\le L\le e^z\le U$. The quantized weight satisfies
+\begin{equation}
+ \E(z)\in[Q_\Delta(L),Q_\Delta(U)]
+ \subseteq[\max(0,L-\Delta/2),U+\Delta/2].
+ \label{eq:lattice}
+\end{equation}
+Thus rounding the outward enclosure endpoints to the target lattice is
+at least as strong as adding a global half-quantum error, provided the
+endpoint quantization itself is exact.
+
+\begin{proof}
+Nearest-even rounding is nondecreasing. To see this directly, suppose
+$x\le y$ but their rounded lattice values satisfy $a>b$. Nearest-point
+optimality implies $|x-a|\le|x-b|$ and $|y-b|\le|y-a|$, giving
+$x\ge(a+b)/2\ge y$. Hence $x=y$, whose deterministic rounding cannot
+give different outputs, a contradiction. Applying this monotonicity to
+$L\le e^z\le U$ proves the first inclusion. Every nonnegative input is
+within $\Delta/2$ of a nonnegative lattice point, so
+$|Q_\Delta(x)-x|\le\Delta/2$; the second inclusion follows.
+\end{proof}
+
+The implementation uses exact power-of-two scaling, integer parity, and
+nearest-even tie handling for admitted finite binary64 endpoints, rejecting
+overflow or invalid inputs. The generic monotone endpoint implication is
+covered by the compiled \code{StateCut.monotone\_weight\_bounds}; the
+binary64 implementation and exponential enclosure are separately tested,
+and are not formally refined to that theorem. An exact negative-tail case
+uses $z\le-25$: since $e>2$, $e^z\le e^{-25}<2^{-25}=\Delta/2$,
+so $\E(z)=0$. Neither construction applies a common score shift.
+
+\section{A Backend Bridge Is an Additional Obligation}
+\label{app:bridge}
+
+\begin{proposition}[Inward-shifted bridge]
+Let $D>0$, $A=N/D$, $\varepsilon\ge0$, and suppose a backend's
+pre-materialization scalar $B$ satisfies $|B-A|\le\varepsilon$.
+If residual bounds establish
+\begin{equation}
+ R(t_-+\varepsilon)\ge0,\qquad
+ R(t_+-\varepsilon)\le0,
+\end{equation}
+with strict signs for excluded cell edges, then $B\in J_y$ and its
+materialization in the same rounding format is $y$.
+\end{proposition}
+\begin{proof}
+The residual signs give $A\ge t_-+\varepsilon$ and
+$A\le t_+-\varepsilon$. Since $B\ge A-\varepsilon$ and
+$B\le A+\varepsilon$, $t_-\le B\le t_+$. A strict first or second
+inequality gives the corresponding strict endpoint condition. These are
+exactly the requirements for membership in $J_y$.
+\end{proof}
+
+The result does not construct $\varepsilon$. In particular it cannot be
+instantiated by an empirical tolerance, a few matching output tensors, or
+a theorem about a different exponential. If the inward-shifted cell is
+empty the sufficient conditions cannot pass, which correctly reflects the
+insufficiency of that error bound for exact rounding. A state-level bridge
+must cover every numerical operation contributing to a live write, not
+only the final attention quotient.
+
+\section{Reproducibility and Artifact Map}
+\label{app:reproduce}
+
+The repository retains raw machine-readable measurements and their logs.
+The manuscript's generated tables contain no manually entered measured
+numbers; their input paths and SHA-256 hashes appear in
+\code{paper/generated/input\_manifest.json}. Current GH200 measurements
+are retained under \code{results/gh200/}; historical release snapshots do
+not substitute for a successful current execution.
+
+\begin{center}
+\begin{tabular}{p{0.47\textwidth}p{0.46\textwidth}}
+\toprule
+Artifact & Responsibility \\
+\midrule
+\code{src/statecut/arithmetic.py} & Exact rounding, elementary enclosures, greedy tie rule \\
+\code{src/statecut/residual.py} & Chord and finite-count residual predicates \\
+\code{src/statecut/forest.py} & Persistent summary construction and refinement tree \\
+\code{src/statecut/tree\_attention.py} & Attention certificates and exact raw-leaf fallback \\
+\code{src/statecut/tree\_model.py} & Exact cuts and staged persistent-write checks \\
+\code{scripts/run\_v2\_experiments.py} & Paired logical-read and complete-state experiments \\
+\code{scripts/capture\_pretrained.py},\newline \code{scripts/audit\_capture.py} & Backend-preserving capture and offline audit \\
+\code{lean/StateCut/} & Theorem sources with a pinned Lean/Mathlib environment \\
+\code{docs/LITERATURE\_AUDIT.md} & Primary-source comparison and novelty scope \\
+\code{paper/} & ICML preprint source, official style, bibliography, and PDF \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+From the repository root, install the test dependencies and run:
+\begin{verbatim}
+python -m pip install -e '.[test]'
+python -m pytest -q
+python scripts/run_v2_experiments.py \
+  --output results/gh200/algorithm/v2_experiments.json
+bash scripts/check_lean.sh
+make -C paper
+\end{verbatim}
+The Lean check must return success after compiling the actual declarations;
+source scans for forbidden placeholders are supporting checks only. CUDA
+build and capture commands, compiler flags, model revision, dtype, attention
+implementation, prompt token IDs, and device metadata belong in the
+corresponding run record. Capture tests can skip if optional Torch or NumPy
+packages are missing; both pass and skip counts must be inspected.
+
+The official ICML 2026 style is vendored without modification from the
+conference's author-instruction archive, whose source and hash are in
+\code{paper/template\_source.json}. The manuscript uses the style's
+\code{preprint} option.
+
+\section{Pretrained CUDA Domain Accounting}
+\label{app:domains}
+\input{generated/cuda_domains.tex}
+
+\section{Compiled Formal Inventory}
+\label{app:formal}
+\input{generated/formal_inventory.tex}
+
+\section{Interpretation of Negative Results}
+
+An exact certificate is useful only if its premises can be established
+cheaply and it accepts often enough for the intended workload. Failure of
+an interval gate does not show that the proposal is wrong; it shows that
+the current enclosure cannot prove it right. Full raw fallback with exact
+state parity is therefore a valid correctness outcome and a negative
+performance outcome. Similarly, a zero-error device test is finite
+conformance evidence, while a counterexample can falsify a universal
+implementation claim immediately. The present artifact preserves both
+types of result.

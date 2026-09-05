@@ -1,0 +1,22 @@
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.97\columnwidth,height=5.1cm,
+  xlabel={Rows in summary (log scale)},ylabel={Raw rows read (\%)},
+  xmode=log,log basis x=2,xmin=2.65,xmax=74,
+  ymin=-8,ymax=112,ytick={0,50,100},
+  xtick={3,5,9,17,33,65},xticklabels={3,5,9,17,33,65},
+  tick label style={font=\small},label style={font=\small},
+  legend style={font=\small,at={(0.5,1.03)},anchor=south,
+    legend columns=1,draw=none},
+  grid=major,grid style={gray!15},axis line style={scGray!70}]
+\addplot[scInk,densely dashed,thick,mark=triangle*,mark size=2.4pt]
+  table[x=rows,y=chord,col sep=comma] {generated/integer_ablation.csv};
+\addlegendentry{Chord, both score ranges}
+\addplot[scBlue,thick,mark=*,mark size=2.2pt]
+  table[x=rows,y=integer013,col sep=comma] {generated/integer_ablation.csv};
+\addlegendentry{Integer count, $|s|\le0.13$}
+\addplot[scOrange!85!black,dashed,thick,mark=square*,mark size=2.1pt]
+  table[x=rows,y=integer015,col sep=comma] {generated/integer_ablation.csv};
+\addlegendentry{Integer count, $|s|\le0.15$}
+\end{axis}
+\end{tikzpicture}
