@@ -6,6 +6,7 @@ accepted from callers. An external adapter needs equivalent provenance checks.
 from __future__ import annotations
 from dataclasses import dataclass
 from fractions import Fraction as F
+from operator import index
 
 
 @dataclass(frozen=True, slots=True)
@@ -69,6 +70,10 @@ class Cache:
     length: int = 0
 
     def __post_init__(self) -> None:
+        try:
+            object.__setattr__(self, "block_size", index(self.block_size))
+        except TypeError as exc:
+            raise ValueError("block_size must be an integer") from exc
         if self.block_size < 1:
             raise ValueError("block_size must be positive")
 

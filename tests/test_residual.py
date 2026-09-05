@@ -1,8 +1,10 @@
 from fractions import Fraction as F
+from itertools import combinations_with_replacement
 from random import Random
 import pytest
 from statecut.arithmetic import Interval, bf16, bf16_value, round_bf16_bits
-from statecut.residual import chord_abs_sum, moment_residual, bf16_cell, cell_accepts
+from statecut.residual import (chord_abs_sum, integer_abs_sum, moment_residual,
+                              bf16_cell, cell_accepts)
 
 
 def test_chord_and_residual_randomized():
@@ -17,6 +19,8 @@ def test_chord_and_residual_randomized():
         total, lo, hi = sum(vs), min(vs), max(vs)
         A = chord_abs_sum(n, total, lo, hi, t)
         assert A >= sum(abs(v-t) for v in vs)
+        sharp = integer_abs_sum(n, total, lo, hi, t)
+        assert sum(abs(v-t) for v in vs) <= sharp <= A
         out = moment_residual(n, total, lo, hi, Interval(a, b), t)
         assert out.contains(sum(w*(v-t) for w, v in zip(ws, vs)))
         # Exact translation equivariance, including very large offsets.
@@ -34,6 +38,50 @@ def test_symmetric_endpoint_envelope_is_attained():
         maximum = sum((b if v >= t else a)*(v-t) for v in vs)
         minimum = sum((a if v >= t else b)*(v-t) for v in vs)
         assert out == Interval(minimum, maximum)
+
+
+def test_integer_envelope_against_exhaustive_fixed_sum_optimization():
+    # Enumerate the feasible row multisets independently of the formula.
+    # This grid contains the maximizing endpoint/remainder construction for
+    # every enumerated moment, so both residual extremes must match exactly.
+    grid = tuple(F(i, 2) for i in range(-2, 3))
+    a, b = F(2, 3), F(7, 5)
+    for n in range(1, 6):
+        rows = tuple(combinations_with_replacement(grid, n))
+        for t in (F(-2), F(-3, 4), F(-1, 8), F(0), F(1, 3), F(1), F(2)):
+            extrema = {}
+            abs_max = {}
+            for vs in rows:
+                total = sum(vs, F(0))
+                minimum = sum((a if v >= t else b)*(v-t) for v in vs)
+                maximum = sum((b if v >= t else a)*(v-t) for v in vs)
+                old = extrema.get(total, (minimum, maximum))
+                extrema[total] = (min(old[0], minimum), max(old[1], maximum))
+                abs_max[total] = max(abs_max.get(total, F(0)), sum(abs(v-t) for v in vs))
+            for total, (minimum, maximum) in extrema.items():
+                sharp = integer_abs_sum(n, total, F(-1), F(1), t)
+                assert sharp == abs_max[total]
+                assert sharp <= chord_abs_sum(n, total, F(-1), F(1), t)
+                assert moment_residual(n, total, F(-1), F(1), Interval(a, b), t) == Interval(minimum, maximum)
+                shift = F(10**30, 7)
+                assert integer_abs_sum(n, total+n*shift, F(-1)+shift, F(1)+shift, t+shift) == sharp
+
+
+def test_integer_inputs_never_round_residual_bounds_through_float():
+    endpoint = 2**53+1
+    expected = 2*endpoint
+    assert chord_abs_sum(2, 0, -endpoint, endpoint, 0) == expected
+    assert isinstance(chord_abs_sum(2, 0, -endpoint, endpoint, 0), F)
+    assert moment_residual(2, 0, -endpoint, endpoint, Interval(0, 2), 0) == Interval(-expected, expected)
+    for n in (0, -1, F(3, 2), 2.0):
+        with pytest.raises(ValueError):
+            integer_abs_sum(n, 0, -1, 1, 0)
+
+
+def test_integer_envelope_strictly_improves_interior_remainder():
+    assert chord_abs_sum(3, 0, -1, 1, 0) == 3
+    assert integer_abs_sum(3, 0, -1, 1, 0) == 2
+    assert moment_residual(3, 0, -1, 1, Interval(0, 2), 0) == Interval(-2, 2)
 
 
 @pytest.mark.parametrize("bits", [0, 1, 2, 127, 128, 129, 0x3f80, 0x3f81, 0x4180,

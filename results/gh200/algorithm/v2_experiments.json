@@ -1,0 +1,227 @@
+{
+  "scope": "synthetic E24 reference; no pretrained/GPU results",
+  "attention": [
+    {
+      "case": "balanced-nonconstant",
+      "method": "v1-independent-flat",
+      "entries": 128,
+      "root_count": 1,
+      "summary_records_read": 4,
+      "raw_entries_read": 128,
+      "fallback": true,
+      "equal_e24_dense": true,
+      "both_indexes_construction_cpu_seconds": 0.003621476000034818
+    },
+    {
+      "case": "balanced-nonconstant",
+      "method": "v2-centered-divided-tree",
+      "entries": 128,
+      "root_count": 1,
+      "summary_records_read": 1,
+      "raw_entries_read": 128,
+      "fallback": true,
+      "equal_e24_dense": true,
+      "both_indexes_construction_cpu_seconds": 0.003621476000034818
+    },
+    {
+      "case": "balanced-nonconstant",
+      "method": "v2-direct-residual-tree",
+      "entries": 128,
+      "root_count": 1,
+      "summary_records_read": 1,
+      "raw_entries_read": 0,
+      "fallback": false,
+      "equal_e24_dense": true,
+      "both_indexes_construction_cpu_seconds": 0.003621476000034818
+    },
+    {
+      "case": "balanced-nonconstant",
+      "method": "v1-independent-flat",
+      "entries": 512,
+      "root_count": 1,
+      "summary_records_read": 16,
+      "raw_entries_read": 512,
+      "fallback": true,
+      "equal_e24_dense": true,
+      "both_indexes_construction_cpu_seconds": 0.01172027600000547
+    },
+    {
+      "case": "balanced-nonconstant",
+      "method": "v2-centered-divided-tree",
+      "entries": 512,
+      "root_count": 1,
+      "summary_records_read": 1,
+      "raw_entries_read": 512,
+      "fallback": true,
+      "equal_e24_dense": true,
+      "both_indexes_construction_cpu_seconds": 0.01172027600000547
+    },
+    {
+      "case": "balanced-nonconstant",
+      "method": "v2-direct-residual-tree",
+      "entries": 512,
+      "root_count": 1,
+      "summary_records_read": 1,
+      "raw_entries_read": 0,
+      "fallback": false,
+      "equal_e24_dense": true,
+      "both_indexes_construction_cpu_seconds": 0.01172027600000547
+    },
+    {
+      "case": "balanced-nonconstant",
+      "method": "v1-independent-flat",
+      "entries": 2048,
+      "root_count": 1,
+      "summary_records_read": 64,
+      "raw_entries_read": 2048,
+      "fallback": true,
+      "equal_e24_dense": true,
+      "both_indexes_construction_cpu_seconds": 0.04388491400004568
+    },
+    {
+      "case": "balanced-nonconstant",
+      "method": "v2-centered-divided-tree",
+      "entries": 2048,
+      "root_count": 1,
+      "summary_records_read": 1,
+      "raw_entries_read": 2048,
+      "fallback": true,
+      "equal_e24_dense": true,
+      "both_indexes_construction_cpu_seconds": 0.04388491400004568
+    },
+    {
+      "case": "balanced-nonconstant",
+      "method": "v2-direct-residual-tree",
+      "entries": 2048,
+      "root_count": 1,
+      "summary_records_read": 1,
+      "raw_entries_read": 0,
+      "fallback": false,
+      "equal_e24_dense": true,
+      "both_indexes_construction_cpu_seconds": 0.04388491400004568
+    },
+    {
+      "case": "balanced-nonconstant",
+      "method": "v1-independent-flat",
+      "entries": 8192,
+      "root_count": 1,
+      "summary_records_read": 256,
+      "raw_entries_read": 8192,
+      "fallback": true,
+      "equal_e24_dense": true,
+      "both_indexes_construction_cpu_seconds": 0.1812961279999854
+    },
+    {
+      "case": "balanced-nonconstant",
+      "method": "v2-centered-divided-tree",
+      "entries": 8192,
+      "root_count": 1,
+      "summary_records_read": 1,
+      "raw_entries_read": 8192,
+      "fallback": true,
+      "equal_e24_dense": true,
+      "both_indexes_construction_cpu_seconds": 0.1812961279999854
+    },
+    {
+      "case": "balanced-nonconstant",
+      "method": "v2-direct-residual-tree",
+      "entries": 8192,
+      "root_count": 1,
+      "summary_records_read": 1,
+      "raw_entries_read": 0,
+      "fallback": false,
+      "equal_e24_dense": true,
+      "both_indexes_construction_cpu_seconds": 0.1812961279999854
+    },
+    {
+      "case": "unstructured",
+      "method": "v2-direct-residual-tree",
+      "entries": 512,
+      "summary_records_read": 19,
+      "raw_entries_read": 512,
+      "fallback": true,
+      "equal_e24_dense": true
+    }
+  ],
+  "state_trajectories": [
+    {
+      "strategy": "cuts",
+      "seed": 0,
+      "steps": 24,
+      "all_tokens_and_states_equal": true,
+      "write_frontier_accepts": 0,
+      "raw_rows_all_layers_steps": 89
+    },
+    {
+      "strategy": "cuts",
+      "seed": 1,
+      "steps": 24,
+      "all_tokens_and_states_equal": true,
+      "write_frontier_accepts": 0,
+      "raw_rows_all_layers_steps": 92
+    },
+    {
+      "strategy": "cuts",
+      "seed": 8,
+      "steps": 24,
+      "all_tokens_and_states_equal": true,
+      "write_frontier_accepts": 0,
+      "raw_rows_all_layers_steps": 316
+    },
+    {
+      "strategy": "cuts",
+      "seed": 19,
+      "steps": 24,
+      "all_tokens_and_states_equal": true,
+      "write_frontier_accepts": 0,
+      "raw_rows_all_layers_steps": 91
+    },
+    {
+      "strategy": "writes",
+      "seed": 0,
+      "steps": 24,
+      "all_tokens_and_states_equal": true,
+      "write_frontier_accepts": 4,
+      "raw_rows_all_layers_steps": 460
+    },
+    {
+      "strategy": "writes",
+      "seed": 1,
+      "steps": 24,
+      "all_tokens_and_states_equal": true,
+      "write_frontier_accepts": 1,
+      "raw_rows_all_layers_steps": 598
+    },
+    {
+      "strategy": "writes",
+      "seed": 8,
+      "steps": 24,
+      "all_tokens_and_states_equal": true,
+      "write_frontier_accepts": 1,
+      "raw_rows_all_layers_steps": 598
+    },
+    {
+      "strategy": "writes",
+      "seed": 19,
+      "steps": 24,
+      "all_tokens_and_states_equal": true,
+      "write_frontier_accepts": 1,
+      "raw_rows_all_layers_steps": 598
+    }
+  ],
+  "write_frontier_separation": {
+    "accepted": true,
+    "equal_token_and_state": true,
+    "non_singleton_attention_cuts": 1,
+    "reads": {
+      "summary_nodes": 4,
+      "raw_entries": 0,
+      "raw_scalars": 0,
+      "splits": 0,
+      "opened_leaves": 0,
+      "frontier_peak": 2,
+      "consumer_calls": 0
+    }
+  },
+  "timing_note": "Construction time is CPU only and includes both indexes; no speedup inferred"
+}

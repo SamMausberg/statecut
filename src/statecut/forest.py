@@ -6,6 +6,7 @@ copy at most one fixed-size tail and the logarithmic root list, not all KV rows.
 """
 from __future__ import annotations
 from dataclasses import dataclass, field
+from operator import index
 from .cache import Entry, Summary
 
 
@@ -62,6 +63,10 @@ class ForestCache:
     length: int = 0
 
     def __post_init__(self) -> None:
+        try:
+            object.__setattr__(self, "block_size", index(self.block_size))
+        except TypeError as exc:
+            raise ValueError("block_size must be an integer") from exc
         if self.block_size <= 0:
             raise ValueError("block_size must be positive")
 
@@ -111,13 +116,21 @@ class ForestCache:
 
     def audit(self) -> None:
         """Expensive ingestion/test audit. NEVER called by the query path."""
-        def check(node: Node) -> Summary:
+        dimensions = None
+        def check(node: Node, sealed: bool) -> Summary:
+            nonlocal dimensions
             if node.leaf:
                 if node.right is not None or not node._rows:
                     raise ValueError("malformed leaf")
+                if sealed and len(node._rows) != self.block_size:
+                    raise ValueError("sealed leaf must contain exactly block_size rows")
                 s = Summary.single(node._rows[0])
                 for row in node._rows[1:]:
                     s = s.append(row)
+                shape = (len(s.kmin), len(s.positive))
+                if dimensions is not None and shape != dimensions:
+                    raise ValueError("inconsistent leaf dimensions")
+                dimensions = shape
             else:
                 if node.right is None or node.left is None or node._rows:
                     raise ValueError("malformed internal node")
@@ -125,7 +138,7 @@ class ForestCache:
                     raise ValueError("noncontiguous children")
                 if node.left.summary.n != node.right.summary.n:
                     raise ValueError("unbalanced binary-counter node")
-                s = merge_summary(check(node.left), check(node.right))
+                s = merge_summary(check(node.left, sealed), check(node.right, sealed))
             if s != node.summary:
                 raise ValueError("summary provenance mismatch")
             return s
@@ -141,7 +154,7 @@ class ForestCache:
         for node in self.frontier:
             if node.start != offset:
                 raise ValueError("forest coverage gap or overlap")
-            check(node)
+            check(node, node is not self.tail)
             offset = node.stop
         if self.tail is not None and (not self.tail.leaf or not 0 < self.tail.summary.n < self.block_size):
             raise ValueError("invalid partial tail")

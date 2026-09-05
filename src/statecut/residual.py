@@ -6,6 +6,7 @@ An independent floating-point attention backend needs its own proven bridge.
 from __future__ import annotations
 from dataclasses import dataclass
 from fractions import Fraction as F
+from operator import index
 from .arithmetic import (Interval, bf16_value, round_bf16_bits, exp_reference,
                          isum)
 from .cache import Summary
@@ -25,26 +26,58 @@ def weight_box(q: tuple[Interval, ...], s: Summary) -> Interval:
     return Interval(exp_reference(z.lo), exp_reference(z.hi))
 
 
+def _moment_inputs(n: int, total: F, lo: F, hi: F, t: F) -> tuple[int, F, F, F, F]:
+    """Canonicalize before division; Python integer division would use float."""
+    try:
+        n = index(n)
+    except TypeError as exc:
+        raise ValueError("count must be an integer") from exc
+    total, lo, hi, t = F(total), F(lo), F(hi), F(t)
+    if n <= 0 or lo > hi or not n*lo <= total <= n*hi:
+        raise ValueError("inconsistent count/sum/value range")
+    return n, total, lo, hi, t
+
+
 def chord_abs_sum(n: int, total: F, lo: F, hi: F, t: F) -> F:
     """Upper bound on sum |v_i-t| using count, sum and range only.
 
     This is the convex chord of absolute value, not a norm heuristic.
     The l == u case is handled without dividing by zero.
     """
-    if n <= 0 or lo > hi or not n*lo <= total <= n*hi:
-        raise ValueError("inconsistent count/sum/value range")
+    n, total, lo, hi, t = _moment_inputs(n, total, lo, hi, t)
     if lo == hi:
         return n * abs(lo-t)
     return ((n*hi-total)*abs(lo-t) + (total-n*lo)*abs(hi-t))/(hi-lo)
 
 
+def integer_abs_sum(n: int, total: F, lo: F, hi: F, t: F) -> F:
+    """Sharp sum |v_i-t| bound for an integer number of bounded real rows.
+
+    A convex objective on a box intersected with a fixed-sum hyperplane has
+    a maximizing vertex with at most one interior coordinate. The sum fixes
+    the number of upper endpoints and the possible remaining coordinate.
+    This is no larger than the continuous-mass chord bound. It does not use
+    the additional constraints linking actual keys and E24 weights.
+    """
+    n, total, lo, hi, t = _moment_inputs(n, total, lo, hi, t)
+    if lo == hi:
+        return n*abs(lo-t)
+    upper_mass = (total-n*lo)/(hi-lo)
+    count = upper_mass.numerator // upper_mass.denominator
+    if count == n:
+        return n*abs(hi-t)
+    remainder = lo+(upper_mass-count)*(hi-lo)
+    return count*abs(hi-t)+(n-count-1)*abs(lo-t)+abs(remainder-t)
+
+
 def moment_residual(n: int, total: F, lo: F, hi: F,
                     weights: Interval, t: F) -> Interval:
-    """Enclose R(t) = sum w_i (v_i-t), retaining shared normalization."""
+    """Sharp residual enclosure for the count/sum/range/common-weight box."""
+    n, total, lo, hi, t = _moment_inputs(n, total, lo, hi, t)
     a, b = weights.lo, weights.hi
     if a < 0:
         raise ValueError("negative attention weight")
-    bound = chord_abs_sum(n, total, lo, hi, t)
+    bound = integer_abs_sum(n, total, lo, hi, t)
     center = (a+b)/2 * (total-n*t)
     radius = (b-a)/2 * bound
     return Interval(center-radius, center+radius)

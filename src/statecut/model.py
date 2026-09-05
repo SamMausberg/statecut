@@ -81,6 +81,15 @@ class Layer:
     norm1: Vec
     norm2: Vec
 
+    def __post_init__(self) -> None:
+        # Frozen dataclasses alone do not freeze caller-owned nested lists.
+        # Snapshot exact weights so a cached model identity remains valid.
+        for name in ("q", "k", "v", "o", "gate", "up", "down"):
+            object.__setattr__(self, name,
+                               tuple(tuple(F(x) for x in row) for row in getattr(self, name)))
+        for name in ("norm1", "norm2"):
+            object.__setattr__(self, name, tuple(F(x) for x in getattr(self, name)))
+
     def suffix(self,h: Vec,a: Vec) -> Vec:
         z = add(h,linear(self.o,a))
         r = norm(z,self.norm2)
@@ -119,6 +128,14 @@ class Model:
     final_norm: Vec
     head: Mat
     query_scale: F = F(1,2)
+
+    def __post_init__(self) -> None:
+        for name in ("embedding", "head"):
+            object.__setattr__(self, name,
+                               tuple(tuple(F(x) for x in row) for row in getattr(self, name)))
+        object.__setattr__(self, "layers", tuple(self.layers))
+        object.__setattr__(self, "final_norm", tuple(F(x) for x in self.final_norm))
+        object.__setattr__(self, "query_scale", F(self.query_scale))
 
     @property
     def identity(self) -> str:

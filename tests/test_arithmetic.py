@@ -92,3 +92,16 @@ def test_direct_bf16_rounding_must_not_double_round_via_fp32():
     via_fp32=F(struct.unpack("f",struct.pack("f",float(x)))[0])
     assert bf16(x)==F(1)+F(1,128)
     assert bf16(via_fp32)==F(1)
+
+
+def test_rsqrt_normalizes_float_radicand_before_midpoint_comparison():
+    radicand = 0.1
+    lower, upper = bf16_value(0x3f80), bf16_value(0x3f81)
+    midpoint = (lower+upper)/2
+    # The numerator is strictly above the true midpoint*sqrt(radicand).
+    # Computing midpoint**2*radicand in float moves that boundary enough to
+    # reverse this exact decision, even though the radicand bits are fixed.
+    numerator = midpoint*sqrt_enclosure(F(radicand), 256).hi
+    assert numerator*numerator > midpoint*midpoint*F(radicand)
+    assert bf16_rsqrt(numerator, radicand) == upper
+    assert bf16_rsqrt(-numerator, radicand) == -upper

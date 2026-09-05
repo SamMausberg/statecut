@@ -18,10 +18,14 @@ class Contribution:
 def score(q: tuple[F, ...], k: tuple[F, ...]) -> F:
     if len(q) != len(k):
         raise ValueError("query/key dimension mismatch")
-    return sum((a*b for a,b in zip(q,k)), F(0))
+    # Match Interval.point's exact interpretation of numeric inputs before
+    # multiplying: otherwise a float query can make dense and filtered
+    # reductions disagree through cancellation in this supposedly exact dot.
+    return sum((F(a)*F(b) for a,b in zip(q,k)), F(0))
 
 
 def summary_contribution(q: tuple[F, ...], s: Summary) -> Contribution:
+    q = tuple(F(x) for x in q)
     if len(q) != len(s.kmin) or len(s.kmin) != len(s.kmax):
         raise ValueError("query/key dimension mismatch")
     if not s.positive or len(s.positive) != len(s.negative) or s.n < 1:
@@ -96,8 +100,19 @@ def verify_attention(cache: Cache, q: tuple[F, ...],
         raise ValueError("empty attention")
     if max_refinements is not None and max_refinements < 0:
         raise ValueError("negative budget")
-    counter = ReadCounter(summary_blocks=len(cache.blocks))
-    cs = [summary_contribution(q,b.summary) for b in cache.blocks]
+    counter = ReadCounter()
+    try:
+        cs = []
+        for block in cache.blocks:
+            counter.summary_blocks += 1
+            cs.append(summary_contribution(q, block.summary))
+    except (ArithmeticError, OverflowError):
+        # Correlations can keep every raw score inside the oracle domain even
+        # when a loose coordinate box exceeds it. No raw block is open yet.
+        vals = dense_attention(cache, q, counter)
+        return Verified(exact_consumer(vals), False, True,
+                        tuple(range(len(cache.blocks))), counter,
+                        tuple(Interval.point(x) for x in vals))
     remaining = set(range(len(cs)))
     opened: list[int] = []
     while True:

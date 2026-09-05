@@ -92,3 +92,53 @@ def test_v2_preserves_original_v1_dense_reference(strategy):
             forest_rows=tuple(e for leaf in nc.iter_leaves() for e in leaf._rows)
             assert original_rows == forest_rows
         old,new=a.state,b.state
+
+
+def test_model_snapshots_mutable_inputs_before_fingerprinting():
+    original = small_model(6)
+    embedding = [list(row) for row in original.embedding]
+    head = [list(row) for row in original.head]
+    final_norm = list(original.final_norm)
+    layer_args = {name: [list(row) for row in getattr(original.layers[0], name)]
+                  for name in ("q", "k", "v", "o", "gate", "up", "down")}
+    layer_args["norm1"] = list(original.layers[0].norm1)
+    layer_args["norm2"] = list(original.layers[0].norm2)
+    layers = [Layer(**layer_args), original.layers[1]]
+    model = TreeModel(Model(embedding, layers, final_norm, head))
+    state = model.step(model.initial(2), 0, strategy="dense").state
+    identity = model._model_id
+    embedding[0][0] += 5
+    head[0][0] += 7
+    final_norm[0] += 9
+    layer_args["q"][0][0] += 11
+    layer_args["norm1"][0] += 13
+    layers.pop()
+    assert model.model == original
+    assert model.model.identity == identity == original.identity
+    expected = model.step(state, 1, strategy="dense")
+    actual = model.step(state, 1, strategy="writes")
+    assert actual.token == expected.token and actual.state == expected.state
+
+
+def test_write_attempt_discards_staged_cache_after_later_layer_failure(monkeypatch):
+    import statecut.tree_model as module
+    model = TreeModel(small_model(7))
+    state = model.initial(2)
+    original_caches = state.caches
+    expected = model.step(state, 0, strategy="dense")
+    original = module.root_enclosure
+    calls = 0
+    def fail_second(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            raise ArithmeticError("injected after staging the second layer")
+        return original(*args, **kwargs)
+    monkeypatch.setattr(module, "root_enclosure", fail_second)
+    actual = model.step(state, 0, strategy="writes")
+    assert calls == 2
+    assert actual.fallback_reason == "arithmetic-domain:ArithmeticError"
+    assert actual.state == expected.state and actual.token == expected.token
+    assert actual.dense_reads == 2
+    assert state.caches is original_caches and state.position == 0 and state.tokens == ()
+    assert all(cache.length == 0 and cache.frontier == () for cache in state.caches)

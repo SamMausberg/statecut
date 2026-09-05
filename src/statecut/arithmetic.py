@@ -244,6 +244,7 @@ def bf16_rsqrt(numerator: F, radicand: F) -> F:
     All ordering and midpoint tests reduce to exact rational square tests.
     This terminates even when the result is exactly a BF16 midpoint.
     """
+    radicand = F(radicand)
     if radicand <= 0:
         raise ValueError("strictly positive radicand required")
     n = abs(F(numerator))

@@ -101,3 +101,53 @@ def test_summary_resource_failure_falls_back_when_actual_scores_are_valid():
     assert r.value == (F(2),)
     assert r.used_dense_fallback and r.stats.raw_entries == 2
     assert r.gate == "dense-fallback:summary-resource"
+
+
+def test_integer_count_gate_accepts_where_continuous_chord_rejects():
+    from statecut.residual import (bf16_cell, cell_accepts, chord_abs_sum,
+                                   weight_box, summary_residual, intersect)
+    rows = [Entry((F(-3, 20),), (F(63, 4),)),
+            Entry((F(0),), (F(16),)),
+            Entry((F(3, 20),), (F(65, 4),))]
+    tree, dense = build(rows, 3)
+    s = tree.roots[0].summary
+    w = weight_box((Interval.point(1),), s)
+    cell = bf16_cell(0x4180)
+    def old_residual(t):
+        total = s.positive[0]+s.negative[0]
+        center = (w.lo+w.hi)/2*(total-s.n*t)
+        radius = w.width/2*chord_abs_sum(s.n, total, s.vmin[0], s.vmax[0], t)
+        old = Interval(center-radius, center+radius)
+        # Include the original signed-moment intersection in the comparison.
+        numerator = Interval(w.lo*s.positive[0]+w.hi*s.negative[0],
+                             w.hi*s.positive[0]+w.lo*s.negative[0])
+        return intersect(old, numerator-w.scale(s.n*t))
+    assert not cell_accepts(old_residual(cell.lo), old_residual(cell.hi), cell)
+    assert cell_accepts(summary_residual(s, w, 0, cell.lo), summary_residual(s, w, 0, cell.hi), cell)
+    report = verify_tree_attention(tree, (F(1),), certify_bf16,
+                                   lambda a: tuple(map(bf16, a)), max_expansions=0,
+                                   direct_bf16=True)
+    assert report.value == tuple(map(bf16, dense_attention(dense, (F(1),)))) == (F(16),)
+    assert report.gate == "direct-boundary" and report.stats.raw_entries == 0
+
+
+def test_float_queries_use_the_same_exact_reduction_in_dense_and_filtered_paths():
+    from statecut.attention import score, verify_attention
+    # All query coordinates are exactly representable. A floating reduction
+    # would lose the middle 1 between +2**54 and -2**54, changing E24 weights.
+    rows = [Entry((0, 0, 0), (0,)), Entry((0, 0, 0), (0,)),
+            Entry((2**54, 1, -2**54), (1,))]
+    tree, dense = build(rows, 1)
+    query = (1.0, 1.0, 1.0)
+    exact_query = tuple(map(F, query))
+    assert score(query, rows[-1].k) == F(1)
+    exact = dense_attention(dense, exact_query)
+    assert dense_attention(dense, query) == exact
+    for direct in (False, True):
+        report = verify_tree_attention(tree, query, certify_bf16,
+                                       lambda a: tuple(map(bf16, a)),
+                                       max_expansions=0, direct_bf16=direct)
+        assert report.value == tuple(map(bf16, exact)) == (F(147, 256),)
+        assert report.stats.raw_entries == 0
+    old = verify_attention(dense, query, certify_bf16, lambda a: tuple(map(bf16, a)))
+    assert old.value == tuple(map(bf16, exact)) and old.stats.raw_entries == 0

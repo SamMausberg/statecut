@@ -2,6 +2,7 @@
 """Paired exact-reference experiments. Logical reads, not GPU speedups."""
 from dataclasses import asdict
 from fractions import Fraction as F
+import argparse
 import json
 from pathlib import Path
 from random import Random
@@ -28,6 +29,10 @@ def fixture():
 
 
 def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output",type=Path,
+                        default=Path(__file__).resolve().parents[1]/"results/v2_experiments.json")
+    args=parser.parse_args()
     reports=[]
     for n in (128,512,2048,8192):
         tree,flat=ForestCache("tree",32),Cache("flat",32)
@@ -92,8 +97,8 @@ def main():
                 "non_singleton_attention_cuts":b.uncertain_attention_cuts,
                 "reads":asdict(b.attempt_stats)},
             "timing_note":"Construction time is CPU only and includes both indexes; no speedup inferred"}
-    root=Path(__file__).resolve().parents[1]
-    (root/"results"/"v2_experiments.json").write_text(json.dumps(report,indent=2)+"\n")
+    args.output.parent.mkdir(parents=True,exist_ok=True)
+    args.output.write_text(json.dumps(report,indent=2)+"\n")
     print(json.dumps(report,indent=2))
 
 if __name__ == "__main__":
