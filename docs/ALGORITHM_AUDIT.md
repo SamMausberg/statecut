@@ -136,3 +136,65 @@ Lean checks establish their stated mathematical propositions separately; they
 do not by themselves verify this Python code, finite-format implementation, or
 a deployed attention backend. E24 resource exhaustion remains a rejected
 execution rather than an approximate answer.
+
+## Real-model precision follow-up
+
+The initial selected Qwen capture audit encountered actual positive scores
+outside the inherited evaluator's domain. In the first layer of the captured
+Qwen2.5-0.5B code prompt with 128 prefix tokens, query head 1 has 129 visible
+rows with exact score range
+
+\[
+[2594329467/2097152,\ 167805713/131072]
+\approx[1237.07269,1280.25599].
+\]
+
+These are actual row scores, not extrema introduced by an axis-aligned key
+box. The old `|x| <= 1024` guard rejected them. Its fixed maximum precision
+of 1024 bits could also fail to decide E24 for positive scores within that
+guard: `exp(1024)` alone needs about 1478 integer bits.
+
+The bounded guard is now `|x| <= 2048`. For each prior precision choice `b`,
+the evaluator uses `b + 2 max(0,ceil(x))` bits. The estimate `e < 4` motivates
+this allowance for the exponential's integer part. Correctness still comes
+from equal rounded endpoints of the exact exponential enclosure; the estimate
+itself is not an acceptance predicate. The maximum requested precision remains
+bounded by 5120 bits. Unresolved rounding still raises an explicit resource
+error, and the algorithm never subtracts a score shift.
+
+An independent 1400-decimal-digit numerical check covers scores `1024`,
+`167805713/131072`, `2048`, and `-2048` at fractional grid precisions `1`,
+`24`, and `256`. The targeted numerical and audit suite completed with
+**83 passed** in 4.53 seconds. Tests also require scores outside the extended
+domain to raise.
+
+The previously failing capture now completes all 14 query heads in 10.39
+seconds of summed CPU audit time; the large-score head takes 4.06 seconds.
+All 14 filtered outputs equal their separately run dense E24 outputs.
+Every head falls back to all 129 rows. This extends executable coverage; it
+does not establish a read reduction or a deployed-backend bridge. Results are
+in [qwen_code_128_layer0_e24_extended.json](../results/gh200/algorithm/qwen_code_128_layer0_e24_extended.json).
+
+The capture audit now saves each completed head and records explicit oracle
+resource, BF16 overflow, or zero-reference-denominator errors per head, with
+null numerical comparisons. It continues through those unsupported heads.
+Unexpected arithmetic failures, including inconsistent sound enclosures,
+still propagate and stop the audit. A subprocess regression checks preservation
+of a supported head alongside oversized-score and all-zero-weight heads;
+another test injects an internal enclosure defect and requires it to escape.
+
+Reproduce the exact score ranges and extended audit with:
+
+```sh
+.venv/bin/python scripts/audit_algorithm.py \
+  --score-capture results/gh200/captures/qwen2.5-0.5b-code-128/capture-0000.npz \
+  --output results/gh200/algorithm/qwen_code_128_layer0_score_domain.json
+.venv/bin/python scripts/audit_capture.py \
+  results/gh200/captures/qwen2.5-0.5b-code-128/capture-0000.npz \
+  --heads 14 --block-size 128 --max-expansions 0 \
+  --output results/gh200/algorithm/qwen_code_128_layer0_e24_extended.json
+```
+
+After integrating this extension with device validation, the final suite
+completed with **185 passed** in 16.52 seconds, including the CUDA cases.
+The full output is [pytest_final.txt](../results/gh200/logs/pytest_final.txt).

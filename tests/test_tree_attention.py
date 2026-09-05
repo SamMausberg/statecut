@@ -91,10 +91,10 @@ def test_direct_boundary_retains_more_information_than_divided_interval():
 
 
 def test_summary_resource_failure_falls_back_when_actual_scores_are_valid():
-    # The box allows scores +/-2048 (outside the oracle guard); each actual
+    # The box allows scores +/-4096 (outside the oracle guard); each actual
     # correlated row has score zero. A failed bound must not reject this target.
-    rows=[Entry((F(1024),F(-1024)),(F(1),)),
-          Entry((F(-1024),F(1024)),(F(3),))]
+    rows=[Entry((F(2048),F(-2048)),(F(1),)),
+          Entry((F(-2048),F(2048)),(F(3),))]
     tree,dense=build(rows,2)
     r=verify_tree_attention(tree,(F(1),F(1)),certify_bf16,
                             lambda a:tuple(map(bf16,a)),direct_bf16=True)

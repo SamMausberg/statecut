@@ -105,3 +105,21 @@ def test_rsqrt_normalizes_float_radicand_before_midpoint_comparison():
     assert numerator*numerator > midpoint*midpoint*F(radicand)
     assert bf16_rsqrt(numerator, radicand) == upper
     assert bf16_rsqrt(-numerator, radicand) == -upper
+
+
+def test_large_positive_e24_uses_enough_absolute_precision():
+    # 2048 needs nearly 3000 integer bits before the fixed fractional grid.
+    # The original fixed maximum of 1024 working bits could not resolve even
+    # exp(1024), despite accepting that score as inside its resource domain.
+    scores = (F(1024), F(167805713, 131072), F(2048), F(-2048))
+    with mp.workdps(1400):
+        for x in scores:
+            truth = mp.exp(mp.mpf(x.numerator)/x.denominator)
+            for fractional_bits in (1, 24, 256):
+                expected = F(int(mp.nint(truth*(1 << fractional_bits))), 1 << fractional_bits)
+                assert exp_reference(x, fractional_bits) == expected
+    # The independent numerical cross-check does not replace the enclosure
+    # proof; unsupported values still raise instead of inventing a weight.
+    for x in (F(4097, 2), F(-4097, 2)):
+        with pytest.raises(OverflowError, match="resource guard"):
+            exp_reference(x)

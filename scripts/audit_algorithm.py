@@ -10,6 +10,7 @@ import argparse
 from dataclasses import asdict
 from datetime import datetime, timezone
 from fractions import Fraction as F
+from functools import lru_cache
 from hashlib import sha256
 from itertools import combinations_with_replacement
 import json
@@ -22,6 +23,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from statecut.arithmetic import Interval, bf16, certify_bf16, round_bf16_bits
+from statecut.arithmetic import bf16_value
+from statecut.attention import score as exact_score
 from statecut.cache import Entry
 from statecut.forest import ForestCache
 from statecut.residual import (bf16_cell, chord_abs_sum, integer_abs_sum,
@@ -151,11 +154,55 @@ def strict_three_row() -> dict:
     return report
 
 
+def capture_score_domain(path: Path) -> dict:
+    """Inspect the exact E24 scores without evaluating any exponential."""
+    import numpy as np
+    with np.load(path, allow_pickle=False) as data:
+        metadata = json.loads(str(data["metadata"]))
+        q, k = data["q"], data["k"]
+    if (metadata.get("schema") != "statecut-sdpa-observation-v1"
+            or not metadata.get("full_visible_zero_bias")):
+        raise ValueError("unsupported capture schema")
+    group = metadata["q_to_kv_group_size"]
+    if (q.dtype != np.uint16 or k.dtype != np.uint16 or q.ndim != 4 or k.ndim != 4
+            or q.shape[0] != 1 or q.shape[2] != 1 or k.shape[0] != 1
+            or q.shape[1] != group*k.shape[1] or q.shape[-1] != k.shape[-1]
+            or k.shape[2] < 1):
+        raise ValueError("invalid capture tensor shape or encoding")
+    scale = F(float.fromhex(metadata["scale_hex"]))
+    value = lru_cache(None)(bf16_value)
+    rows = []
+    for head in range(q.shape[1]):
+        query = tuple(scale*value(int(x)) for x in q[0, head, 0])
+        scores = [exact_score(query, tuple(value(int(x)) for x in row))
+                  for row in k[0, head//group]]
+        rows.append({"head":head, "min":str(min(scores)), "max":str(max(scores)),
+                     "min_float":float(min(scores)), "max_float":float(max(scores)),
+                     "below_original_guard":sum(x < -1024 for x in scores),
+                     "above_original_guard":sum(x > 1024 for x in scores),
+                     "below_extended_guard":sum(x < -2048 for x in scores),
+                     "above_extended_guard":sum(x > 2048 for x in scores),
+                     "provably_zero_e24":sum(x <= -25 for x in scores),
+                     "count":len(scores)})
+    return {"capture":str(path), "capture_sha256":sha256(path.read_bytes()).hexdigest(),
+            "metadata":metadata, "query_shape":list(q.shape), "key_shape":list(k.shape),
+            "arithmetic":"Exact rational dot products of captured BF16 values and recorded scale",
+            "rows":rows}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path,
-                        default=ROOT / "results/gh200/integer_moment.json")
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--score-capture", type=Path,
+                        help="inspect exact captured score domains instead of synthetic moment checks")
     args = parser.parse_args()
+    if args.score_capture is not None:
+        report = capture_score_domain(args.score_capture)
+        destination = args.output or ROOT / "results/gh200/algorithm/score_domain.json"
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(json.dumps(report, indent=2)+"\n")
+        print(json.dumps(report, indent=2))
+        return
     report = {
         "generated_utc": datetime.now(timezone.utc).isoformat(),
         "scope": "RATIONAL_BF16_V1 exact Python reference; logical reads, no GPU speed claim",
@@ -169,8 +216,9 @@ def main() -> None:
                           for path in sorted((ROOT / "src/statecut").glob("*.py"))
                           if path.name not in ("capture.py", "cuda_frontier.py")},
     }
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(report, indent=2)+"\n")
+    destination = args.output or ROOT / "results/gh200/integer_moment.json"
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(json.dumps(report, indent=2)+"\n")
     print(json.dumps(report, indent=2))
 
 

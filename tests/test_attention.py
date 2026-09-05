@@ -116,7 +116,7 @@ def test_summary_invalid_signs_are_rejected():
 
 def test_flat_summary_resource_failure_falls_back_to_valid_correlated_scores():
     cache = Cache("correlated", 2)
-    for k, v in (((1024, -1024), 1), ((-1024, 1024), 3)):
+    for k, v in (((2048, -2048), 1), ((-2048, 2048), 3)):
         cache = cache.append(Entry(k, (v,)))
     query = (F(1), F(1))
     report = verify_attention(cache, query, certify_bf16, lambda a: tuple(map(bf16, a)))

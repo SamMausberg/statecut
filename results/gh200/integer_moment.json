@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-05T21:57:35.365699+00:00",
+  "generated_utc": "2026-09-05T22:12:57.171966+00:00",
   "scope": "RATIONAL_BF16_V1 exact Python reference; logical reads, no GPU speed claim",
   "python": "3.10.12",
   "integer_moment_exhaustive": {
@@ -551,13 +551,13 @@
   },
   "source_sha256": {
     "src/statecut/__init__.py": "c9260ed36253bba7e618b23e20ee747024f1bd0d7240d90ad9ec63cc559c68a6",
-    "src/statecut/arithmetic.py": "d24bf2aa78e12a8434e09be627a66ddfd1afec6d46a1cef1021f767f65b8a5d2",
-    "src/statecut/attention.py": "535381601c7a02c0879c8397fe3f2bfad564011f691bccabf1cd9a88255c1578",
+    "src/statecut/arithmetic.py": "690d40e706c0947447c8ae06818186a4f43756a9459153520de3ed3c553e4d1f",
+    "src/statecut/attention.py": "cfae47045990dce56beef087018f44acdd3f3cc283be0b979f8fc848737c20aa",
     "src/statecut/cache.py": "343c03e0f46535769ec84493bc512cc7984b3608269ed7151406db19b5014096",
     "src/statecut/forest.py": "772f93f49358ce3fbfaa86a5c8de3a276d22f1db6f5954a45585e6c129b8a290",
     "src/statecut/model.py": "61c7301b8a2b80ba5b05acda8d6f803e531a49df65d6a129acc55199ed27a49a",
     "src/statecut/residual.py": "41e9947685e211b89c1e6ca16cb38a6f56986190a0158223ee5cc059fdf6195c",
-    "src/statecut/tree_attention.py": "f609451442854c150a3dabe60f9b2c0507dd699ad16f92c0a3fd6dce83bcd851",
+    "src/statecut/tree_attention.py": "d96502ca5eba86ee6046c9e81518c69fbb485aa6cd27b3f3767bc6fe29cff960",
     "src/statecut/tree_model.py": "1f04a336f6ba3c233bdb0e6c7dcd994eb4d81f9f863a85f860cc47dbe713b6f3"
   }
 }

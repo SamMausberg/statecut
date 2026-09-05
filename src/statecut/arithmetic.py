@@ -12,6 +12,18 @@ from math import isqrt
 from typing import Iterable
 
 
+class OracleResourceError(OverflowError):
+    """The bounded exact evaluator cannot resolve the requested primitive."""
+
+
+class BF16OverflowError(OverflowError):
+    """The exact materialization is outside the finite BF16 profile."""
+
+
+class ReferenceDenominatorError(ZeroDivisionError):
+    """All exact E24 attention weights sum to zero; the target is undefined."""
+
+
 @dataclass(frozen=True, slots=True)
 class Interval:
     lo: F
@@ -84,8 +96,8 @@ def exp_enclosure(x: F, bits: int = 96) -> Interval:
     x = F(x)
     if bits < 8:
         raise ValueError("bits must be >= 8")
-    if abs(x) > 1024:
-        raise OverflowError("oracle resource guard: |score| > 1024")
+    if abs(x) > 2048:
+        raise OracleResourceError("oracle resource guard: |score| > 2048")
     if x == 0:
         return Interval.point(1)
     t, squares = abs(x), 0
@@ -127,19 +139,25 @@ def rne_integer(x: F) -> int:
 def exp_reference(x: F, fractional_bits: int = 24) -> F:
     """E_p(x) = 2^-p RNE(2^p exp(x)), evaluated by rigorous enclosures.
 
-    Not a CUDA exp implementation. Positive inputs to E may round to zero
-    for sufficiently negative scores. A zero denominator is rejected.
+    Not a CUDA exp implementation. Weights may round to zero for sufficiently
+    negative scores. A zero denominator is rejected.
     A resource limit raises, never silently approximates.
     """
     if not 1 <= fractional_bits <= 256:
         raise ValueError("fractional_bits must be in [1,256]")
+    x = F(x)
     scale = 1 << fractional_bits
+    # A fixed absolute exponential grid needs precision for the integer part
+    # too. exp(x) < 2**(2*ceil(x)) for x>0 (e<4) gives a conservative initial
+    # precision budget. Acceptance still requires exact enclosure agreement;
+    # this estimate is never itself a numerical certificate.
+    magnitude_bits = 2*max(0, -((-x.numerator)//x.denominator))
     for bits in (64, 128, 256, 512, 1024):
-        b = exp_enclosure(F(x), bits)
+        b = exp_enclosure(x, bits+magnitude_bits)
         a, c = rne_integer(b.lo * scale), rne_integer(b.hi * scale)
         if a == c:
             return F(a, scale)
-    raise ArithmeticError("exp rounding unresolved: increase precision, do not accept")
+    raise OracleResourceError("exp rounding unresolved: increase precision, do not accept")
 
 
 def bf16_value(bits: int) -> F:
@@ -173,7 +191,7 @@ def round_bf16_bits(x: F) -> int:
     if i == len(table):
         threshold = table[-1] + (table[-1] - table[-2]) / 2
         if y >= threshold:
-            raise OverflowError("reference BF16 overflow")
+            raise BF16OverflowError("reference BF16 overflow")
         code = len(table) - 1
     elif table[i] == y or i == 0:
         code = i
@@ -261,7 +279,7 @@ def bf16_rsqrt(numerator: F, radicand: F) -> F:
     if i == len(table):
         boundary = table[-1]+(table[-1]-table[-2])/2
         if target >= boundary*boundary*radicand:
-            raise OverflowError("reference BF16 overflow")
+            raise BF16OverflowError("reference BF16 overflow")
         code = len(table)-1
     elif table[i]*table[i]*radicand == target or i == 0:
         code = i

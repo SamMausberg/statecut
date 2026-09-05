@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from fractions import Fraction as F
 from typing import Callable, Generic, TypeVar
-from .arithmetic import Interval, isum, certify_bf16
+from .arithmetic import Interval, isum, certify_bf16, ReferenceDenominatorError
 from .attention import exact_contribution, Contribution
 from .forest import ForestCache, Node, TreeReads
 from .residual import (weight_box, summary_residual, intersect, choose_cell,
@@ -114,7 +114,7 @@ def dense_tree_attention(cache: ForestCache, q: tuple[F, ...],
         raise ValueError("empty attention")
     d = sum((c.denominator.lo for c in contributions), F(0))
     if d <= 0:
-        raise ArithmeticError("reference denominator zero")
+        raise ReferenceDenominatorError("reference denominator zero")
     return tuple(sum((c.numerator[j].lo for c in contributions), F(0))/d
                  for j in range(len(contributions[0].numerator)))
 
@@ -191,7 +191,7 @@ def verify_tree_attention(cache: ForestCache, q: tuple[F, ...],
                         stack.extend((node.right, node.left))
             d = sum((c.denominator.lo for c in complete), F(0))
             if d <= 0:
-                raise ArithmeticError("reference denominator zero")
+                raise ReferenceDenominatorError("reference denominator zero")
             vals = tuple(sum((c.numerator[j].lo for c in complete), F(0))/d
                          for j in range(len(complete[0].numerator)))
             return TreeVerified(exact_consumer(vals), False, True, reads,

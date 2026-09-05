@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from fractions import Fraction as F
 from typing import Callable, TypeVar
-from .arithmetic import Interval, exp_reference, isum
+from .arithmetic import Interval, exp_reference, isum, ReferenceDenominatorError
 from .cache import Cache, Summary, Entry, ReadCounter
 
 T = TypeVar("T")
@@ -70,7 +70,7 @@ def dense_attention(cache: Cache, q: tuple[F, ...], counter: ReadCounter | None 
     cs = tuple(exact_contribution(q,cache.read_block(i,counter)) for i in range(len(cache.blocks)))
     enc = enclosure(cs)
     if enc is None:
-        raise ArithmeticError("reference denominator zero")
+        raise ReferenceDenominatorError("reference denominator zero")
     assert all(x.lo == x.hi for x in enc)
     return tuple(x.lo for x in enc)
 
@@ -123,7 +123,7 @@ def verify_attention(cache: Cache, q: tuple[F, ...],
                 return Verified(value,True,False,tuple(opened),counter,enc)
         if not remaining:
             if enc is None:
-                raise ArithmeticError("reference denominator zero")
+                raise ReferenceDenominatorError("reference denominator zero")
             if any(x.lo != x.hi for x in enc):
                 raise ArithmeticError("fallback did not recover exact reference values")
             value = exact_consumer(tuple(x.lo for x in enc))
@@ -135,7 +135,7 @@ def verify_attention(cache: Cache, q: tuple[F, ...],
                 opened.append(i)
             enc = enclosure(tuple(cs))
             if enc is None:
-                raise ArithmeticError("reference denominator zero")
+                raise ReferenceDenominatorError("reference denominator zero")
             if any(x.lo != x.hi for x in enc):
                 raise ArithmeticError("fallback did not recover exact reference values")
             value = exact_consumer(tuple(x.lo for x in enc))

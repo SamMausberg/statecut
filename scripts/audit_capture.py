@@ -5,9 +5,13 @@ from fractions import Fraction as F
 import json
 from pathlib import Path
 import sys
+import time
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/"src"))
-from statecut.arithmetic import bf16_value, round_bf16_bits, bf16, certify_bf16
+from statecut.arithmetic import (bf16_value, round_bf16_bits, bf16, certify_bf16,
+                                 OracleResourceError, BF16OverflowError,
+                                 ReferenceDenominatorError)
 from statecut.cache import Entry
+from statecut.attention import score
 from statecut.forest import ForestCache
 from statecut.tree_attention import verify_tree_attention, dense_tree_attention
 
@@ -39,32 +43,64 @@ def main():
         raise SystemExit("shape / head map mismatch")
     scale = F(float.fromhex(meta["scale_hex"]))
     rows = []
+    output = Path(a.output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    def save():
+        report = {"claim":"E24 correctness test and observational backend comparison only",
+                  "backend_replacement_authorized":False,
+                  "reason":"no proved enclosure of the pinned deployed floating-point operator",
+                  "capture":str(Path(a.capture)),
+                  "heads_requested":min(a.heads,h), "heads_completed":len(rows),
+                  "supported_heads":sum(row["e24_status"] == "passed" for row in rows),
+                  "unsupported_heads":sum(row["e24_status"] == "unsupported" for row in rows),
+                  "rows":rows}
+        output.write_text(json.dumps(report,indent=2)+"\n")
+        return report
     for head in range(min(a.heads, h)):
+        started = time.perf_counter()
         kh = head//group
         cache = ForestCache(f"capture:{Path(a.capture).name}:head:{head}", a.block_size)
         for i in range(n):
             cache = cache.append(Entry(tuple(bf16_value(int(b)) for b in k[0,kh,i]),
                                        tuple(bf16_value(int(b)) for b in v[0,kh,i])))
         query = tuple(scale*bf16_value(int(b)) for b in q[0,head,0])
-        r = verify_tree_attention(cache, query, certify_bf16, lambda x:tuple(map(bf16,x)),
-                                  max_expansions=a.max_expansions, direct_bf16=True)
-        dense = tuple(map(bf16,dense_tree_attention(cache,query)))
+        try:
+            r = verify_tree_attention(cache, query, certify_bf16, lambda x:tuple(map(bf16,x)),
+                                      max_expansions=a.max_expansions, direct_bf16=True)
+            dense = tuple(map(bf16,dense_tree_attention(cache,query)))
+        except (OracleResourceError, BF16OverflowError, ReferenceDenominatorError) as exc:
+            # Failure to execute this profile is neither inequality nor a
+            # certificate. Preserve completed heads and continue the audit.
+            scores = [score(query,e.k) for leaf in cache.iter_leaves() for e in leaf._rows]
+            kind = ("zero-reference-denominator" if isinstance(exc, ReferenceDenominatorError)
+                    else "bf16-domain" if isinstance(exc, BF16OverflowError) else "oracle-resource")
+            rows.append({"head":head, "kv_head":kh, "entries":n,
+                         "e24_status":"unsupported", "e24_equal_dense":None,
+                         "e24_cut_accepted_without_fallback":None,
+                         "raw_entries":None, "summary_nodes":None,
+                         "observed_backend_bit_matches":None,
+                         "coordinates":v.shape[-1],
+                         "error_type":type(exc).__name__, "error":str(exc),
+                         "error_kind":kind,
+                         "exact_score_min":str(min(scores)), "exact_score_max":str(max(scores)),
+                         "elapsed_cpu_seconds":time.perf_counter()-started})
+            save()
+            continue
         bits = [round_bf16_bits(x) for x in r.value]
         observed = [int(b) for b in out[0,head,0]]
         rows.append({"head":head, "kv_head":kh, "entries":n,
+                     "e24_status":"passed" if r.value == dense else "mismatch",
                      "e24_equal_dense":r.value == dense,
                      "e24_cut_accepted_without_fallback":r.accepted_from_bounds,
                      "raw_entries":r.stats.raw_entries,"summary_nodes":r.stats.summary_nodes,
                      "observed_backend_bit_matches":sum(x == y for x,y in zip(bits,observed)),
                      "coordinates":len(bits),
+                     "elapsed_cpu_seconds":time.perf_counter()-started,
                      "negative_zero_note":"E24 canonicalizes zero; observed bits are not canonicalized"})
+        save()
         if r.value != dense:
             raise AssertionError("E24 implementation regression")
-    report = {"claim":"E24 correctness test and observational backend comparison only",
-              "backend_replacement_authorized":False,
-              "reason":"no proved enclosure of the pinned deployed floating-point operator",
-              "rows":rows}
-    Path(a.output).write_text(json.dumps(report,indent=2)+"\n")
+    report = save()
     print(json.dumps(report,indent=2))
 
 if __name__ == "__main__":
